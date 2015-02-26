@@ -1,12 +1,29 @@
 var Parser = require('../lib/Parser');
+var utils = require('./utils');
 
-// 'data', 'asdfasdfasdf'
-var buff = new Buffer([0x00,0x00,0x00,0x18,0x00,0x00,0x00,0x04,0x64,0x61,0x74,0x61,0x00,0x00,0x00,0x0c,0x61,0x73,0x64,0x66,0x61,0x73,0x64,0x66,0x61,0x73,0x64,0x66]);
+var TIMES = 100000;
+var string = utils.randomString(10000);
+var buffer = Parser.writeBuffer(string, string);
 
-var start = Date.now();
-Parser.readBuffer(buff)
-console.log(Date.now() - start);
 
-start = Date.now();
-Parser.writeBuffer('data', 'asdfasdfasdf')
-console.log(Date.now() - start);
+//testReadBuffer(TIMES);
+testWriteBuffer(TIMES, string);
+
+
+function testReadBuffer(times) {
+	var start = Date.now(),
+		i;
+	for(i = 0; i < times; i++) {
+		Parser.readBuffer(buffer);
+	}
+	console.log(Date.now() - start);
+}
+
+function testWriteBuffer(times, string) {
+	var start = Date.now(),
+		i;
+	for(i = 0; i < times; i++) {
+		Parser.writeBuffer(string, string);
+	}
+	console.log(Date.now() - start);
+}

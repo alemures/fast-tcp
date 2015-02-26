@@ -4,33 +4,37 @@ var client = new Client({
 	host: 'localhost',
 	port: 5000
 });
-var string = s(10000);
 
 client.on('connect', function() {
 	console.log('Connected to server');
-	//client.send('data', 'Hello, Server!');
-	send(100000);
+	client.send('data', 'Hello, Server!');
 });
 
-client.on('data', function(data) {
-	console.log('Received from server: ' + data);
+client.on('close', function() {
+	console.log('Disconnected from server');
 });
 
-function send(times) {
-	var i;
+client.on('error', function(err) {
+	console.log(err.code + ': ' + err.message);
+});
 
-	for(i = 0; i < times; i++) {
-		//socket.emit('data', string);
-		client.send('data', string);
-	}
-}
+// Custom events
+client.on('welcome', function(data) {
+	console.log('welcome: ' + data);
+});
 
-function s(size) {
-    var string = '';
-    var n = 26;
-    var charA = 65;
-    for (var i = 0; i < size; i++) {
-        string += String.fromCharCode(Math.floor(Math.random() * 26) + charA);
-    }
-    return string;
-}
+client.on('actual', function(data) {
+	console.log('actual: ' + data);
+});
+
+client.on('new', function(data) {
+	console.log('new: ' + data);
+
+	setInterval(function() {
+		client.send('message', JSON.stringify({text: 'Hello, World!', to: 'asdf'}));
+	}, 2000);
+});
+
+client.on('old', function(data) {
+	console.log('old: ' + data);
+});

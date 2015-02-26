@@ -1,35 +1,21 @@
 var Accumulator = require('../lib/Accumulator');
 var Parser = require('../lib/Parser');
+var utils = require('./utils');
 
 var acc = new Accumulator();
 
-var buffers = [];
-var i, SIZE = 1;
-var start = Date.now();
-for(i = 0; i < SIZE; i++) {
-	buffers.push(Parser.writeBuffer('asdf', 'asdfñ'));
-}
+var TIMES = 100000;
+var string = utils.randomString(10000);
+var buffer = Parser.writeBuffer(string, string);
+var start;
+
+start = Date.now();
+testAdd(TIMES, buffer);
 console.log(Date.now() - start);
 
-for(i = 0; i < SIZE; i++) {
-	console.log(Parser.readBuffer(buffers[i]));
-}
-
-
-function randomString(size) {
-    var string = '',
-        start = 97,
-        alphabetLength = 26,
-        end = start + alphabetLength,
-        i;
-
-    for (i = 0; i < size; i++) {
-        string += String.fromCharCode(
-            randomNumber(start, end));
+function testAdd(times, buffer) {
+    var i;
+    for(i = 0; i < times; i++) {
+        acc.add(buffer)
     }
-    return string;
-}
-
-function randomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
 }

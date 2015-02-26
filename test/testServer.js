@@ -1,26 +1,44 @@
 var Server = require('../index').Server;
-var server = new Server(5000);
-var c = 0;
+
+var port = 5000;
+var server = new Server(port);
+
+var clients = [];
+
+server.on('listening', function() {
+	console.log('TCP server listening at port ' + port);
+});
 
 server.on('connection', function(clientId) {
+	server.sendAllExcept('new', '' + clientId, clientId);
+
+	server.sendTo(clientId, 'welcome', 'Welcome new client');
+	server.sendTo(clientId, 'actual', '' + clients);
+
+	clients.push(clientId);
+
 	console.log('Connected client #' + clientId);
 });
 
 server.on('disconnection', function(clientId) {
+	clients.splice(clients.indexOf(clientId), 1);
+
+	server.sendAll('old', '' + clientId);
+
 	console.log('Disconnected client #' + clientId);
 });
 
-server.on('data', function(clientId, data) {
-	c++;
-	//console.log('Client #' + clientId + ' says: ' + data);
+server.on('close', function() {
+	console.log('TCP server closed');
 });
 
-/*setInterval(function() {
-	server.sendAll('data', 'Hi Clients!');
-}, 3000);*/
+server.on('error', function(err) {
+	console.log(err.code);
+});
 
-var last = 0;
-setInterval(function() {
-	console.log(c - last + ' msg/s');
-	last = c;
-}, 1000);
+// Custom events
+
+server.on('message', function(message) {
+	console.log(message);
+	console.log(JSON.parse(message));
+});
