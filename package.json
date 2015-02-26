@@ -1,0 +1,15 @@
+{
+  "name": "fast-tcp",
+  "version": "0.0.1",
+  "description": "fast-tcp is a extremely fast TCP server and client that allows to send and receive messages.",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alejandro Santiago Nieto",
+  "license": "ISC"
+}

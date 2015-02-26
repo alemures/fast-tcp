@@ -1,0 +1,10 @@
+fast-tcp protocol
+===
+
+payloadLength(UInt32LE) nameLength(UInt32LE) name(utf8 string) dataLength(UInt32LE) data(utf8 string)
+
+Example:
+
+	client.send('fast', 'tcp');
+
+	<Buffer 0f 00 00 00 04 00 00 00 66 61 73 74 03 00 00 00 74 63 70>

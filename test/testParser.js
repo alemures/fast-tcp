@@ -7,8 +7,10 @@ var buffer = Parser.writeBuffer(string, string);
 
 
 //testReadBuffer(TIMES);
-testWriteBuffer(TIMES, string);
+//testWriteBuffer(TIMES, string);
 
+
+console.log(Parser.writeBuffer('fast', 'tcp'));
 
 function testReadBuffer(times) {
 	var start = Date.now(),
