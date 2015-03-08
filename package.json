@@ -1,6 +1,6 @@
 {
   "name": "fast-tcp",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "fast-tcp is a extremely fast TCP server and client that allows to send and receive messages.",
   "main": "index.js",
   "directories": {

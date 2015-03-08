@@ -5,10 +5,10 @@ var TIMES = 100000;
 var string = utils.randomString(10000);
 var buffer = Serializer.serialize(string, string);
 
-//testReadBuffer(TIMES);
-//testWriteBuffer(TIMES, string);
+testDeserialize(TIMES);
+//testSerialize(TIMES, string);
 
-function testReadBuffer(times) {
+function testDeserialize(times) {
 	var start = Date.now();
 	var i;
 	for(i = 0; i < times; i++) {
@@ -17,7 +17,7 @@ function testReadBuffer(times) {
 	console.log(Date.now() - start);
 }
 
-function testWriteBuffer(times, string) {
+function testSerialize(times, string) {
 	var start = Date.now();
 	var i;
 	for(i = 0; i < times; i++) {
