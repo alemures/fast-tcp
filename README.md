@@ -5,21 +5,23 @@ fast-tcp is a extremely fast TCP server and client that allows to send and recei
 
 Server example:
 ```
-var Server = require('fast-tcp').Server;
-var server = new Server(5000);
-server.on('message', function(clientId, data) {
-	console.log('Client #' + clientId + ' says: ' + data);
-})
+var Server = require('../index').Server;
+var port = 5000;
+var server = new Server();
+server.listen(port);
+server.on('connection', function(socket) {
+	socket.emit('data', 'Hello, Clients!');
+});
 ```
 
 Client example:
 ```
-var Client = require('fast-tcp').Client;
-var client = new Client({
+var Socket = require('../index').Socket;
+var socket = new Socket({
 	host: 'localhost',
 	port: 5000
 });
-client.on('connect', function() {
-	client.send('message', 'Hello, Server!');
+socket.on('data', function(data) {
+	console.log(data);
 });
 ```

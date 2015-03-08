@@ -1,2 +1,2 @@
 module.exports.Server = require('./lib/Server');
-module.exports.Client = require('./lib/Client');
+module.exports.Socket = require('./lib/Socket');

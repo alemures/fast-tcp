@@ -1,16 +1,16 @@
-var Client = require('../index').Client;
+var Socket = require('../index').Socket;
 var utils = require('./utils');
 
 var TIMES = 100000;
 var string = utils.randomString(10000);
-var client = new Client({
+var socket = new Socket({
 	host: 'localhost',
 	port: 5000
 });
 
-client.on('connect', function() {
+socket.on('connect', function() {
 	var i;
 	for(i = 0; i < TIMES; i++) {
-		client.send('data', string);
+		socket.emit('data', string);
 	}
 });
