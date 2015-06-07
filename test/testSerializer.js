@@ -5,8 +5,10 @@ var TIMES = 100000;
 var string = utils.randomString(10000);
 var buffer = Serializer.serialize(string, string);
 
-testDeserialize(TIMES);
+//testDeserialize(TIMES);
 //testSerialize(TIMES, string);
+
+console.log(Serializer.serialize('fast', 'tcp'));
 
 function testDeserialize(times) {
 	var start = Date.now();

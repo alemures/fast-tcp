@@ -2,7 +2,10 @@ var Socket = require('../index').Socket;
 
 var socket = new Socket({
 	host: 'localhost',
-	port: 5000
+	port: 5000,
+
+	//reconnection: false,
+	//reconnectionInterval: 2500
 });
 
 socket.on('data', function(data) {

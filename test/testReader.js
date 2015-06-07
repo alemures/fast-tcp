@@ -22,7 +22,7 @@ function testAdd(times, buffer) {
 }*/
 
 // With fragmentation
-var TIMES = 1024;
+/*var TIMES = 1024;
 var string = utils.randomString(1008);
 var chunk = Serializer.serialize('asdf', string); // 1024 Bytes
 var buffer = new Buffer(1024*1024);
@@ -41,4 +41,4 @@ function testAdd(times, buffer) {
     for(i = 0; i < times; i++) {
         reader.read(buffer);
     }
-}
+}*/
