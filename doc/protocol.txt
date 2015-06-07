@@ -1,7 +1,13 @@
 fast-tcp protocol
 ===
 
-payloadLength(UInt32LE) eventLength(UInt32LE) event(utf8 string) messageLength(UInt32LE) message(utf8 string)
+payloadLength(UInt32LE) flags(1 byte) eventLength(UInt32LE) event(utf8 string) messageLength(UInt32LE) message(utf8 string)
+
+Flags:
+
+	res res res res res messageType messageType messageType
+	0 0 0 0 0 0 0 1 // String message
+	0 0 0 0 0 0 1 0 // Buffer message
 
 Example:
 
