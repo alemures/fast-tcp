@@ -1,16 +1,11 @@
-var Server = require('../index').Server;
-var port = 5000;
-var server = new Server();
-server.listen(port);
-server.on('connection', function(socket) {
-	socket.emit('data', new Buffer('Hello, Clients!'));
-});
+'use strict';
 
-var Socket = require('../index').Socket;
-var socket = new Socket({
-	host: 'localhost',
-	port: 5000
-});
-socket.on('data', function(data) {
-	console.log(data.toString());
+var describe = require('mocha').describe;
+var it = require('mocha').it;
+var chai = require('chai');
+
+describe('test', function() {
+  it('should be true', function() {
+    chai.assert(true, 'true');
+  });
 });

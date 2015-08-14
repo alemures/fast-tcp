@@ -1,7 +1,7 @@
 fast-tcp
 ===
 
-fast-tcp is a extremely fast TCP server and client that allows to send and receive messages as Buffer or String. The messages are sent in binary format using Buffer and TCP, standard modules of Node.JS.
+fast-tcp is a extremely fast TCP server and client that allows to transmit messages as buffers or strings. The messages are sent in binary format using Buffer and TCP, standard modules of Node.JS.
 
 Server example:
 ```

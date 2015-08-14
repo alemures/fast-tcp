@@ -1,16 +1,25 @@
 {
   "name": "fast-tcp",
-  "version": "0.0.4",
-  "description": "fast-tcp is a extremely fast TCP server and client that allows to send and receive messages.",
-  "main": "index.js",
-  "directories": {
-    "doc": "doc",
-    "test": "test",
-    "lib": "lib"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "version": "0.0.5",
+  "description": "fast-tcp is a extremely fast TCP server and client that allows to transmit messages as buffers or strings.",
   "author": "Alejandro Santiago Nieto",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "jscs": "^2.0.0",
+    "jshint": "^2.8.0",
+    "mocha": "^2.2.5",
+    "nodemon": "^1.4.0",
+    "ut": "git+https://github.com/alemures/ut.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "mocha test/*.js",
+    "watch": "nodemon index.js --watch index.js --watch lib/*.js",
+    "jshint": "jshint index.js lib/*.js test/*.js examples/*.js",
+    "jscs": "jscs index.js lib/*.js test/*.js examples/*.js",
+    "jscs:fix": "jscs --fix index.js lib/*.js test/*.js examples/*.js",
+    "check": "npm run test && npm run jshint && npm run jscs && npm outdated"
+  }
 }
