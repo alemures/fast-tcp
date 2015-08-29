@@ -1,18 +1,41 @@
 fast-tcp protocol
 =
 
-payloadLength(UInt32LE) flags(1 byte) eventLength(UInt32LE) event(utf8 string) messageLength(UInt32LE) message(utf8 string)
+String message:
+Object message:
+	payloadLength(uInt32LE) flags(1 byte) eventLength(uInt32LE) event(utf8 string) messageLength(uInt32LE) message(utf8 string)
+
+Integer number message:
+	payloadLength(uInt32LE) flags(1 byte) eventLength(uInt32LE) event(utf8 string) messageLength(uInt32LE) message(int48LE)
+
+Double number message:
+	payloadLength(uInt32LE) flags(1 byte) eventLength(uInt32LE) event(utf8 string) messageLength(uInt32LE) message(double64LE)
+
+Buffer message:
+	payloadLength(uInt32LE) flags(1 byte) eventLength(uInt32LE) event(utf8 string) messageLength(uInt32LE) message(raw buffer)
 
 Flags:
 
 	res res res res res messageType messageType messageType
 	0 0 0 0 0 0 0 1 // String message
 	0 0 0 0 0 0 1 0 // Buffer message
+	0 0 0 0 0 0 1 1 // Integer number message
+	0 0 0 0 0 1 0 0 // Double number message
+	0 0 0 0 0 1 0 1 // Object message
 
-Example:
+Examples:
 
-	socket.emit('fast', 'tcp');
-	<Buffer 10 00 00 00 01 04 00 00 00 66 61 73 74 03 00 00 00 74 63 70>
+	socket.emit('string', 'fast-tcp');
+	<Buffer 17 00 00 00 01 06 00 00 00 73 74 72 69 6e 67 08 00 00 00 66 61 73 74 2d 74 63 70>
 
-	socket.emit('fast', new Buffer('tcp'));
-	<Buffer 10 00 00 00 02 04 00 00 00 66 61 73 74 03 00 00 00 74 63 70>
+	socket.emit('buffer', new Buffer('fast-tcp'));
+	<Buffer 17 00 00 00 02 06 00 00 00 62 75 66 66 65 72 08 00 00 00 66 61 73 74 2d 74 63 70>
+
+	socket.emit('integer', 512);
+	<Buffer 16 00 00 00 03 07 00 00 00 69 6e 74 65 67 65 72 06 00 00 00 00 02 00 00 00 00>
+
+	socket.emit('double', 512.215);
+	<Buffer 17 00 00 00 04 06 00 00 00 64 6f 75 62 6c 65 08 00 00 00 1f 85 eb 51 b8 01 80 40>
+
+	socket.emit('object', {name: 'fast-tcp'});
+	<Buffer 22 00 00 00 05 06 00 00 00 6f 62 6a 65 63 74 13 00 00 00 7b 22 6e 61 6d 65 22 3a 22 66 61 73 74 2d 74 63 70 22 7d>
