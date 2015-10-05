@@ -1,6 +1,6 @@
 {
   "name": "fast-tcp",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "fast-tcp is a extremely fast TCP server and client that allows to transmit messages as buffers or strings.",
   "author": "Alejandro Santiago Nieto",
   "license": "ISC",
