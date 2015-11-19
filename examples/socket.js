@@ -1,6 +1,6 @@
 'use strict';
 
-var ut = require('ut');
+var ut = require('utjs');
 
 var Socket = require('../index').Socket;
 
