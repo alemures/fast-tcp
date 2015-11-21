@@ -1,3 +1,5 @@
+'use strict';
+
 var ut = require('utjs');
 
 var Socket = require('../index').Socket;
@@ -29,5 +31,4 @@ setInterval(function() {
   var delta = counter - lastCounterValue;
   console.log(delta + ' msg/s, ' + Math.floor(delta * messageSize / 1024 / 1024) + ' MB/s');
   lastCounterValue = counter;
-  console.log(Object.keys(socket._acks).length)
 }, 1000);

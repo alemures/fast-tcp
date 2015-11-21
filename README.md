@@ -12,13 +12,16 @@ npm install fast-tcp
 Server:
 ```
 var Server = require('fast-tcp').Server;
+
 var server = new Server();
 server.on('connection', function(socket) {
-  socket.emit('integer', 512);
-  socket.emit('double', 512.215);
-  socket.emit('buffer', new Buffer('fast-tcp'));
-  socket.emit('string', 'fast-tcp');
-  socket.emit('object', {name: 'fast-tcp'});
+  // Simple event
+  socket.emit('welcome', 'Hi there');
+
+  // Using callbacks (avoid mixing events)
+  socket.on('sum', function(numbers, cb) {
+    cb(numbers.n1 + numbers.n2);
+  });
 });
 server.listen(5000);
 ```
@@ -28,25 +31,16 @@ Client:
 var Socket = require('fast-tcp').Socket;
 var socket = new Socket({
   host: 'localhost',
-  port: 5000,
-  
-  // New parameters not in standard net.Socket
-  reconnection: true,
-  reconnectionInterval: 2500
+  port: 5000
 });
-socket.on('string', function(data) {
-  console.log('string:', data);
+
+socket.on('connect', function() {
+  socket.emit('sum', { n1: 5, n2: 3 }, function(result) {
+    console.log('Result:', result);
+  });
 });
-socket.on('buffer', function(data) {
-  console.log('buffer:', data);
-});
-socket.on('integer', function(data) {
-  console.log('int:', data);
-});
-socket.on('double', function(data) {
-  console.log('double:', data);
-});
-socket.on('object', function(data) {
-  console.log('object:', data);
+
+socket.on('welcome', function(message) {
+  console.log('Server says: ' + message);
 });
 ```
