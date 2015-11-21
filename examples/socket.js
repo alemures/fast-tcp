@@ -33,5 +33,11 @@ socket.on('error', function(err) {
 });
 
 setInterval(function() {
-  socket.emit('data', 'Hello, World ' + ut.randomNumber(1, 100) + '!');
+  //socket.emit('event1', 'Hello, World ' + ut.randomNumber(1, 100) + '!');
 }, 2500);
+
+setInterval(function() {
+  socket.emit('event2', 'How are you?', function(response) {
+    console.log('Response: ' + response);
+  });
+}, 2000);

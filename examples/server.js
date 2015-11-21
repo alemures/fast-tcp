@@ -10,8 +10,12 @@ server.on('connection', function(socket) {
 
   console.log(label, 'connected');
 
-  socket.on('data', function(data) {
+  socket.on('event1', function(data) {
     console.log(label, data);
+  });
+
+  socket.on('event2', function(data, cb) {
+    cb(data + ' -> Fine, thanks');
   });
 
   socket.on('end', function() {
