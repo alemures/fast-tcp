@@ -6,7 +6,7 @@ var port = 5000;
 var server = new Server();
 
 server.on('connection', function(socket) {
-  var label = 'Socket#' + socket.id;
+  var label = 'Socket id: ' + socket.id;
 
   console.log(label, 'connected');
 

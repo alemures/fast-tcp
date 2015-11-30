@@ -8,8 +8,9 @@ var socket = new Socket({
   host: 'localhost',
   port: 5000
 
-  //reconnection: false,
-  //reconnectionInterval: 2500
+  //reconnect: false,
+  //reconnectInterval: 2500,
+  //autoConnect: true
 });
 
 socket.on('data', function(data) {
@@ -20,12 +21,16 @@ socket.on('connect', function() {
   console.log('connect');
 });
 
+socket.on('reconnecting', function() {
+  console.log('reconnecting');
+});
+
 socket.on('end', function() {
   console.log('end');
 });
 
-socket.on('close', function(isError) {
-  console.log(isError ? 'close due to an error' : 'close');
+socket.on('close', function() {
+  console.log('close');
 });
 
 socket.on('error', function(err) {

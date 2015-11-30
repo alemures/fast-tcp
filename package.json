@@ -1,6 +1,6 @@
 {
   "name": "fast-tcp",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "fast-tcp is a extremely fast TCP server and client that allows to transmit messages as buffers or strings.",
   "author": "Alejandro Santiago Nieto",
   "license": "MIT",
@@ -12,8 +12,7 @@
     "jscs": "^2.0.0",
     "jshint": "^2.8.0",
     "mocha": "^2.2.5",
-    "nodemon": "^1.4.0",
-    "utjs": "^1.0.8"
+    "nodemon": "^1.4.0"
   },
   "main": "index.js",
   "files": [
