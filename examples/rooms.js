@@ -3,14 +3,12 @@
 var Server = require('../index').Server;
 
 var server = new Server();
-server.on('connection', function(socket) {
-});
+server.listen(5000);
 
 setInterval(function() {
   server.emitRoom('ping', 'You are in My room', 'My room');
 }, 1000);
 
-server.listen(5000);
 
 var Socket = require('../index').Socket;
 var socket1 = new Socket({
