@@ -8,6 +8,13 @@ In order to get the maximum performance, every data type is sent using the faste
 ## Install
 npm install fast-tcp
 
+## Features
+* All primitive data types are supported (string, number, object, buffer)
+* Configurable automatic reconnection
+* Callbacks for particular emits
+* Rooms
+* AS FAST AS LIGHT!
+
 ## Samples
 Server:
 ```
@@ -44,3 +51,5 @@ socket.on('welcome', function(message) {
   console.log('Server says: ' + message);
 });
 ```
+
+Check out the folder `examples/` for more samples.
