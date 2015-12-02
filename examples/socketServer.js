@@ -13,6 +13,11 @@ server.on('connection', function(socket) {
   });
 });
 
+setInterval(function() {
+  // Emitting to room 'My room'
+  server.emitRoom('room event', 'Hi socket!', 'my room')
+}, 1500);
+
 server.listen(5000);
 
 var Socket = require('../index').Socket;
@@ -22,11 +27,20 @@ var socket = new Socket({
 });
 
 socket.on('connect', function() {
+  // Providing a thrid param will send a callback to server
   socket.emit('sum', { n1: 5, n2: 3 }, function(result) {
     console.log('Result:', result);
   });
+
+  // Join to room 'My room'
+  socket.join('my room');
 });
 
 socket.on('welcome', function(message) {
   console.log('Server says: ' + message);
+});
+
+// Event sent to room 'my room'
+socket.on('room event', function(message) {
+  console.log('Server says through room: ' + message);
 });
