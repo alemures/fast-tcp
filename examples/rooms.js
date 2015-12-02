@@ -6,7 +6,8 @@ var server = new Server();
 server.listen(5000);
 
 setInterval(function() {
-  server.emitRoom('ping', 'You are in My room', 'My room');
+  console.log(JSON.stringify(Object.keys(server.sockets[socket2.id]._rooms)));
+  server.emitRoom('ping', 'You are in My room', 'My room 0');
 }, 1000);
 
 
@@ -18,7 +19,9 @@ var socket1 = new Socket({
 
 socket1.on('connect', function() {
   console.log('socket1 connected: ' + this.id);
-  socket1.join('My room');
+
+  for (var i = 0; i < 100; i++)
+    socket1.join('My room ' + i);
 });
 
 socket1.on('ping', function(message) {
@@ -36,7 +39,8 @@ var socket2 = new Socket({
 
 socket2.on('connect', function() {
   console.log('socket2 connected: ' + this.id);
-  socket2.join('My room');
+  for (var i = 0; i < 100; i++)
+    socket2.join('My room ' + i);
 });
 
 socket2.on('ping', function(message) {
@@ -44,6 +48,6 @@ socket2.on('ping', function(message) {
 });
 
 setTimeout(function() {
-  socket2.leave('My room');
+  socket2.leaveAll();
   socket2.emitTo('Bye', 'I have to leave the room', socket1.id);
 }, 3000);

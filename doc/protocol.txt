@@ -31,7 +31,7 @@ Flags:
 	0 0 1 1 0 0 0 0 // Event room message
 	0 0 1 1 1 0 0 0 // Event to message
 	0 1 0 0 0 0 0 0 // Register message
-
+	0 1 0 0 1 0 0 0 // Room leave all message
 
 Examples:
 
