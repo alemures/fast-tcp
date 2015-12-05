@@ -1,51 +1,53 @@
-fast-tcp protocol
-===
+= fast-tcp Protocol =
 
-String and Object message:
-	payloadLength(uInt32LE) flags(1 byte) ackId(uInt32LE) eventLength(uInt32LE) event(utf8 string) messageLength(uInt32LE) message(utf8 string)
+Message Format
+------------
 
-Integer number message:
-	payloadLength(uInt32LE) flags(1 byte) ackId(uInt32LE) eventLength(uInt32LE) event(utf8 string) messageLength(uInt32LE) message(int48LE)
++---------------+---------+-------+----------+-------------+-----------+-------------+--------+------------+------+
+|   uInt32LE    |  byte   | byte  |   byte   |    byte     | uInt32LE  |  uInt16LE   | string |  uInt32LE  |  *   |
++---------------+---------+-------+----------+-------------+-----------+-------------+--------+------------+------+
+| messageLength | version | flags | dataType | messageType | messageId | eventLength | event  | dataLength | data |
++---------------+---------+-------+----------+-------------+-----------+-------------+--------+------------+------+
 
-Double number message:
-	payloadLength(uInt32LE) flags(1 byte) ackId(uInt32LE) eventLength(uInt32LE) event(utf8 string) messageLength(uInt32LE) message(double64LE)
-
-Buffer message:
-	payloadLength(uInt32LE) flags(1 byte) ackId(uInt32LE) eventLength(uInt32LE) event(utf8 string) messageLength(uInt32LE) message(raw buffer)
+*  The data type can be int48LE, double64LE, string, object or buffer.
 
 
-Flags:
+Version
+-------
 
-	res messageType messageType messageType messageType dataType dataType dataType
-	0 0 0 0 0 0 0 1 // String message
-	0 0 0 0 0 0 1 0 // Buffer message
-	0 0 0 0 0 0 1 1 // Integer number message
-	0 0 0 0 0 1 0 0 // Double number message
-	0 0 0 0 0 1 0 1 // Object message
+ - 1. Actual
 
-	0 0 0 0 1 0 0 0 // Event message
-	0 0 0 1 0 0 0 0 // Ack message
-	0 0 0 1 1 0 0 0 // Room join message
-	0 0 1 0 0 0 0 0 // Room leave message
-	0 0 1 0 1 0 0 0 // Event broadcast message
-	0 0 1 1 0 0 0 0 // Event room message
-	0 0 1 1 1 0 0 0 // Event to message
-	0 1 0 0 0 0 0 0 // Register message
-	0 1 0 0 1 0 0 0 // Room leave all message
 
-Examples:
+Flags
+-----
 
-	socket.emit('string', 'fast-tcp');
-	<Buffer 1b 00 00 00 09 00 00 00 00 06 00 00 00 73 74 72 69 6e 67 08 00 00 00 66 61 73 74 2d 74 63 70>
++---+---+---+---+---+---+---+---+
+| 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
++---+---+---+---+---+---+---+---+
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
++---+---+---+---+---+---+---+---+
 
-	socket.emit('buffer', new Buffer('fast-tcp'));
-	<Buffer 1b 00 00 00 0a 00 00 00 00 06 00 00 00 62 75 66 66 65 72 08 00 00 00 66 61 73 74 2d 74 63 70>
 
-	socket.emit('integer', 1024);
-	<Buffer 1a 00 00 00 0b 00 00 00 00 07 00 00 00 69 6e 74 65 67 65 72 06 00 00 00 00 04 00 00 00 00>
+Data Type
+---------
 
-	socket.emit('double', 1024.512);
-	<Buffer 1b 00 00 00 0c 00 00 00 00 06 00 00 00 64 6f 75 62 6c 65 08 00 00 00 35 5e ba 49 0c 02 90 40>
+ - 1. string
+ - 2. buffer
+ - 3. int
+ - 4. double
+ - 5. object
 
-	socket.emit('object', { name: 'fast-tcp' });
-	<Buffer 26 00 00 00 0d 00 00 00 00 06 00 00 00 6f 62 6a 65 63 74 13 00 00 00 7b 22 6e 61 6d 65 22 3a 22 66 61 73 74 2d 74 63 70 22 7d>
+
+Message Type
+------------
+
+ - 1. Register
+ - 2. Message
+ - 3. Message to socket
+ - 4. Message to room
+ - 5. Message to all
+ - 6. Message with ack
+ - 7. Ack
+ - 8. Join room
+ - 9. Leave room
+ - 10. Leave all rooms
