@@ -15,7 +15,7 @@ server.on('connection', function(socket) {
 
 setInterval(function() {
   // Emitting to room 'My room'
-  server.emitRoom('room event', 'Hi socket!', 'my room')
+  server.emitRoom('room event', 'Hi socket!', 'my room');
 }, 1500);
 
 server.listen(5000);
