@@ -49,5 +49,5 @@ socket2.on('ping', function(message) {
 
 setTimeout(function() {
   socket2.leaveAll();
-  socket2.emitTo('Bye', 'I have to leave the room', socket1.id);
+  socket2.emitSocket('Bye', 'I have to leave the room', socket1.id);
 }, 3000);
