@@ -10,6 +10,7 @@
   "devDependencies": {
     "chai": "^3.2.0",
     "jscs": "^2.0.0",
+    "jsdoc": "^3.4.0",
     "jshint": "^2.8.0",
     "mocha": "^2.2.5",
     "nodemon": "^1.4.0"
@@ -26,7 +27,8 @@
     "jshint": "jshint index.js lib/*.js test/*.js examples/*.js",
     "jscs": "jscs index.js lib/*.js test/*.js examples/*.js",
     "jscs:fix": "jscs --fix index.js lib/*.js test/*.js examples/*.js",
-    "check": "npm run test && npm run jshint && npm run jscs && npm outdated"
+    "check": "npm run test && npm run jshint && npm run jscs && npm outdated",
+    "doc": "rm -rf ./doc && jsdoc ./lib/ ./package.json ./README.md -d ./doc"
   },
   "repository": {
     "type": "git",

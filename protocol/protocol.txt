@@ -15,7 +15,7 @@ Message Format
 Version
 -------
 
- - 1. Actual
+- 1. Actual
 
 
 Flags
@@ -31,23 +31,24 @@ Flags
 Data Type
 ---------
 
- - 1. string
- - 2. buffer
- - 3. int
- - 4. double
- - 5. object
+- 1. string
+- 2. buffer
+- 3. int
+- 4. double
+- 5. object
 
 
 Message Type
 ------------
 
- - 1. Register
- - 2. Data
- - 3. Data to socket
- - 4. Data to room
- - 5. Data broadcast
- - 6. Data with ack
- - 7. Ack
- - 8. Join room
- - 9. Leave room
- - 10. Leave all rooms
+- 1. Register
+- 2. Data
+- 3. Data to socket
+- 4. Data to room
+- 5. Data broadcast
+- 6. Data with ack
+- 7. Ack
+- 8. Join room
+- 9. Leave room
+- 10. Leave all rooms
+ 
