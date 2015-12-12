@@ -45,10 +45,10 @@ socket2.on('ping', function(message) {
 
 setTimeout(function() {
   socket2.leaveAll();
-  socket2.emitSocket('Bye', 'I have to leave the room', socket1.id);
+  socket2.emit('Bye', 'I have to leave the room', { sockets: [socket1.id] });
 }, 3000);
 
 setInterval(function() {
   console.log(JSON.stringify(Object.keys(server.sockets[socket2.id]._rooms)));
-  server.emitRoom('ping', 'You are in My room', 'My room 0');
+  server.emit('ping', 'You are in My room', { rooms: ['My room 0'] });
 }, 1000);

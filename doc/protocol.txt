@@ -42,11 +42,11 @@ Message Type
 ------------
 
  - 1. Register
- - 2. Message
- - 3. Message to socket
- - 4. Message to room
- - 5. Message to all
- - 6. Message with ack
+ - 2. Data
+ - 3. Data to socket
+ - 4. Data to room
+ - 5. Data broadcast
+ - 6. Data with ack
  - 7. Ack
  - 8. Join room
  - 9. Leave room
