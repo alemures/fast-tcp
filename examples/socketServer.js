@@ -26,15 +26,13 @@ var socket = new Socket({
   port: 5000
 });
 
-socket.on('connect', function() {
-  // Providing a thrid param will send a callback to server
-  socket.emit('sum', { n1: 5, n2: 3 }, function(result) {
-    console.log('Result:', result);
-  });
-
-  // Join to room 'My room'
-  socket.join('my room');
+// Providing a thrid param will send a callback to server
+socket.emit('sum', { n1: 5, n2: 3 }, function(result) {
+  console.log('Result:', result);
 });
+
+// Join to room 'My room'
+socket.join('my room');
 
 socket.on('welcome', function(message) {
   console.log('Server says: ' + message);

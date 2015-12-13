@@ -10,7 +10,9 @@ var socket = new Socket({
 
   //reconnect: false,
   //reconnectInterval: 2500,
-  //autoConnect: true
+  //autoConnect: true,
+  //useQueue: true,
+  //queueSize: 100
 });
 
 socket.on('data', function(data) {

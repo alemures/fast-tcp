@@ -129,6 +129,8 @@
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -164,6 +166,12 @@
             
 
             
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
 
             <td class="description last">Enable or disable the reconnection.</td>
         </tr>
@@ -196,6 +204,12 @@
                 </td>
             
 
+            
+                <td class="default">
+                
+                    1000
+                
+                </td>
             
 
             <td class="description last">The reconnection interval.</td>
@@ -230,9 +244,97 @@
             
 
             
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
 
             <td class="description last">Enable or disable the
        auto connection after instance the class.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>useQueue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <td class="description last">Enable or disable the usage of an internal
+       queue that will containt the emitted messages while the socket isn't
+       connected. The enqueued messages will be sent as soon as the socket
+       is connected.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>queueSize</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    Infinity
+                
+                </td>
+            
+
+            <td class="description last">The max size of the queue. If the queue is
+       full, new messages will be added and the oldest will be removed.</td>
         </tr>
 
     
@@ -280,7 +382,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line20">line 20</a>
+        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line26">line 26</a>
     </li></ul></dd>
     
 
@@ -330,6 +432,87 @@
 
     
 
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> :String</span></h4>
+
+
+
+
+<div class="description">
+    A unique identificator for this socket.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">String</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="Sock.html#id">Sock#id</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line49">line 49</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
     
 
     
@@ -398,7 +581,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line81">line 81</a>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line93">line 93</a>
     </li></ul></dd>
     
 
@@ -485,7 +668,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line69">line 69</a>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line81">line 81</a>
     </li></ul></dd>
     
 
@@ -679,6 +862,8 @@ in the constructor.
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -714,6 +899,12 @@ in the constructor.
             
 
             
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
 
             <td class="description last">The list of socket ids to send.</td>
         </tr>
@@ -747,6 +938,12 @@ in the constructor.
             
 
             
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
 
             <td class="description last">The list of rooms to send.</td>
         </tr>
@@ -779,6 +976,12 @@ in the constructor.
                 </td>
             
 
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
             
 
             <td class="description last">Send to all connected sockets.</td>
@@ -829,7 +1032,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line37">line 37</a>
+        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -916,7 +1119,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line59">line 59</a>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line71">line 71</a>
     </li></ul></dd>
     
 
@@ -999,7 +1202,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line91">line 91</a>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line103">line 103</a>
     </li></ul></dd>
     
 
@@ -1152,7 +1355,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line51">line 51</a>
+        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -1283,7 +1486,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line62">line 62</a>
+        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -1413,7 +1616,7 @@ in the constructor.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sat Dec 12 2015 21:23:04 GMT+0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Dec 13 2015 02:18:24 GMT+0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

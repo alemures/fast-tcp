@@ -180,6 +180,155 @@
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="rooms"><span class="type-signature"></span>rooms<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    The rooms with at least one socket or more. The key is the room name and
+the value an array of sockets.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="sockets"><span class="type-signature"></span>sockets<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    The connected sockets. The key is the Socket.id and the value a socket.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -240,7 +389,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line123">line 123</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line134">line 134</a>
     </li></ul></dd>
     
 
@@ -278,7 +427,8 @@
 
 
 <div class="description">
-    Emit an event.
+    Emit an event, if no sockets or rooms are provided, the event
+will be broadcasted to all connected sockets.
 </div>
 
 
@@ -431,6 +581,8 @@
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -466,6 +618,12 @@
             
 
             
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
 
             <td class="description last">The list of socket ids to send.</td>
         </tr>
@@ -499,6 +657,12 @@
             
 
             
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
 
             <td class="description last">The list of rooms to send.</td>
         </tr>
@@ -531,6 +695,12 @@
                 </td>
             
 
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
             
 
             <td class="description last">The list of socket ids to exclude.</td>
@@ -581,7 +751,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line42">line 42</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line53">line 53</a>
     </li></ul></dd>
     
 
@@ -735,7 +905,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line53">line 53</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -889,7 +1059,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line78">line 78</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line89">line 89</a>
     </li></ul></dd>
     
 
@@ -1020,7 +1190,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line100">line 100</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line111">line 111</a>
     </li></ul></dd>
     
 
@@ -1151,7 +1321,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line116">line 116</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -1199,7 +1369,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sat Dec 12 2015 21:23:04 GMT+0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Dec 13 2015 02:18:24 GMT+0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -41,10 +41,8 @@ var socket = new Socket({
   port: 5000
 });
 
-socket.on('connect', function() {
-  socket.emit('sum', { n1: 5, n2: 3 }, function(result) {
-    console.log('Result:', result);
-  });
+socket.emit('sum', { n1: 5, n2: 3 }, function(result) {
+  console.log('Result:', result);
 });
 
 socket.on('welcome', function(message) {
