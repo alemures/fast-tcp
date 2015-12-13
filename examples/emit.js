@@ -37,7 +37,6 @@ setTimeout(function() {
 
 server.listen(5000);
 
-
 socket1.on('connect', function() {
   this.join('my room');
 
@@ -57,15 +56,14 @@ socket1.on('connect', function() {
   }, 1000);
 });
 
-socket1.on('emit-to-socket', log);
-socket1.on('emit-to-room', log);
-socket1.on('emit-to-everyone', log);
-socket1.on('server-emit-to-everyone', log);
-socket1.on('server-emit-to-room', log);
-socket1.on('server-emit-to-socket', log);
-socket1.on('server-emit-to-room-except', log);
-socket1.on('server-emit-to-everyone-except', log);
-
+socket1.on('emit-to-socket', Log);
+socket1.on('emit-to-room', Log);
+socket1.on('emit-to-everyone', Log);
+socket1.on('server-emit-to-everyone', Log);
+socket1.on('server-emit-to-room', Log);
+socket1.on('server-emit-to-socket', Log);
+socket1.on('server-emit-to-room-except', Log);
+socket1.on('server-emit-to-everyone-except', Log);
 
 socket2.on('connect', function() {
   this.join('my room');
@@ -86,15 +84,15 @@ socket2.on('connect', function() {
   }, 1000);
 });
 
-socket2.on('emit-to-socket', log);
-socket2.on('emit-to-room', log);
-socket2.on('emit-to-everyone', log);
-socket2.on('server-emit-to-everyone', log);
-socket2.on('server-emit-to-room', log);
-socket2.on('server-emit-to-socket', log);
-socket2.on('server-emit-to-room-except', log);
-socket2.on('server-emit-to-everyone-except', log);
+socket2.on('emit-to-socket', Log);
+socket2.on('emit-to-room', Log);
+socket2.on('emit-to-everyone', Log);
+socket2.on('server-emit-to-everyone', Log);
+socket2.on('server-emit-to-room', Log);
+socket2.on('server-emit-to-socket', Log);
+socket2.on('server-emit-to-room-except', Log);
+socket2.on('server-emit-to-everyone-except', Log);
 
-function log(data) {
+function Log(data) {
   console.log(this.id, data);
 }
