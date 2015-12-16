@@ -51,3 +51,6 @@ socket.on('welcome', function(message) {
 ```
 
 Check out the folder `examples/` for more samples.
+
+## jsdoc
+http://alemures.github.io/fast-tcp/
