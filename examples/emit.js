@@ -13,41 +13,43 @@ var socket2 = new Socket({
   port: 5000
 });
 
-server.on('connection', function(socket) {
-  socket.on('emit', function(data) {
+server.on('connection', function (socket) {
+  socket.on('emit', function (data) {
     console.log(data);
   });
 
-  socket.on('emit-with-callback', function(numbers, cb) {
+  socket.on('emit-with-callback', function (numbers, cb) {
     cb(numbers.n1 + numbers.n2);
   });
 });
 
-setTimeout(function() {
+setTimeout(function () {
   server.emit('server-emit-to-everyone', 'server-emit-to-everyone');
 
   server.emit('server-emit-to-room', 'server-emit-to-room', { rooms: ['my room'] });
 
   server.emit('server-emit-to-socket', 'server-emit-to-socket', { sockets: [socket1.id] });
 
-  server.emit('server-emit-to-room-except', 'server-emit-to-room-except', { rooms: 'my room', except: [socket1.id] });
+  server.emit('server-emit-to-room-except', 'server-emit-to-room-except',
+      { rooms: 'my room', except: [socket1.id] });
 
-  server.emit('server-emit-to-everyone-except', 'server-emit-to-everyone-except', { except: [socket1.id] });
+  server.emit('server-emit-to-everyone-except', 'server-emit-to-everyone-except',
+      { except: [socket1.id] });
 }, 1000);
 
 server.listen(5000);
 
-socket1.on('connect', function() {
+socket1.on('connect', function () {
   this.join('my room');
 
   this.emit('emit', 'Hi server');
 
-  this.emit('emit-with-callback', { n1: 5, n2: 3 }, function(result) {
+  this.emit('emit-with-callback', { n1: 5, n2: 3 }, function (result) {
     console.log('Result:', result);
   });
 
   var _this = this;
-  setTimeout(function() {
+  setTimeout(function () {
     _this.emit('emit-to-socket', 'emit-to-socket', { sockets: [socket2.id] });
 
     _this.emit('emit-to-room', 'emit-to-room', { rooms: ['my room'] });
@@ -65,17 +67,17 @@ socket1.on('server-emit-to-socket', Log);
 socket1.on('server-emit-to-room-except', Log);
 socket1.on('server-emit-to-everyone-except', Log);
 
-socket2.on('connect', function() {
+socket2.on('connect', function () {
   this.join('my room');
 
   this.emit('emit', 'Hi server');
 
-  this.emit('emit-with-callback', { n1: 5, n2: 3 }, function(result) {
+  this.emit('emit-with-callback', { n1: 5, n2: 3 }, function (result) {
     console.log('Result:', result);
   });
 
   var _this = this;
-  setTimeout(function() {
+  setTimeout(function () {
     _this.emit('emit-to-socket', 'emit-to-socket', { sockets: [socket1.id] });
 
     _this.emit('emit-to-room', 'emit-to-room', { rooms: ['my room'] });

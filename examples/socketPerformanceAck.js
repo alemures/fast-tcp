@@ -15,7 +15,7 @@ var socket = new Socket({
   port: 5000
 });
 
-socket.on('connect', function() {
+socket.on('connect', function () {
   var i;
   for (i = 0; i < times; i++) {
     socket.emit('data', string, receiver);
@@ -27,7 +27,7 @@ function receiver(data) {
   counter++;
 }
 
-setInterval(function() {
+setInterval(function () {
   var delta = counter - lastCounterValue;
   console.log(delta + ' msg/s, ' + Math.floor(delta * messageSize / 1024 / 1024) + ' MB/s');
   lastCounterValue = counter;

@@ -11,7 +11,7 @@ var socket = new Socket({
   port: 5000
 });
 
-socket.on('connect', function() {
+socket.on('connect', function () {
   var i;
   for (i = 0; i < times; i++) {
     socket.emit('data', string);
