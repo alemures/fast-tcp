@@ -44,11 +44,12 @@ var MAX_MESSAGE_ID = Math.pow(2, 32) - 1;
  *
  * @constructor
  * @abstract
- * @fires Socket#reconnecting
- * @fires Socket#socket_connect
- * @fires Socket#end
- * @fires Socket#close
- * @fires Socket#error
+ * @fires Sock#reconnecting
+ * @fires Sock#socket_connect
+ * @fires Sock#end
+ * @fires Sock#close
+ * @fires Sock#error
+ * @fires Sock#timeout
  */
 function Sock(opts) {
   opts = ut.isObject(opts) ? opts : {};
@@ -57,23 +58,20 @@ function Sock(opts) {
   this._reader = new Reader();
   this._opts = opts;
 
-  this._shouldReconnect = ut.isBoolean(opts.reconnect) ?
-      opts.reconnect : Constants.RECONNECT;
+  this._shouldReconnect = ut.isBoolean(opts.reconnect) ? opts.reconnect : Constants.RECONNECT;
 
-  this._reconnectInterval = ut.isNumber(opts.reconnectInterval) ?
-    opts.reconnectInterval : Constants.RECONNECT_INTERVAL;
+  this._reconnectInterval = ut.isNumber(opts.reconnectInterval) ? opts.reconnectInterval :
+      Constants.RECONNECT_INTERVAL;
 
-  this._autoConnect = ut.isBoolean(opts.autoConnect) ?
-      opts.autoConnect : Constants.AUTO_CONNECT;
+  this._autoConnect = ut.isBoolean(opts.autoConnect) ? opts.autoConnect : Constants.AUTO_CONNECT;
 
-  this._useQueue = ut.isBoolean(opts.useQueue) ? opts.useQueue :
-      Constants.USE_QUEUE;
+  this._useQueue = ut.isBoolean(opts.useQueue) ? opts.useQueue : Constants.USE_QUEUE;
 
-  this._queueSize = ut.isNumber(opts.queueSize) ? opts.queueSize :
-      Constants.QUEUE_SIZE;
+  this._queueSize = ut.isNumber(opts.queueSize) ? opts.queueSize : Constants.QUEUE_SIZE;
 
-  this._messageListener = ut.isFunction(opts.messageListener) ?
-      opts.messageListener : null;
+  this._timeout = ut.isNumber(opts.timeout) ? opts.timeout : Constants.TIMEOUT;
+
+  this._messageListener = ut.isFunction(opts.messageListener) ? opts.messageListener : null;
 
   /**
    * A unique identificator for this socket.
@@ -86,6 +84,7 @@ function Sock(opts) {
 
   this._socket = null;
   this._connected = false;
+  this._manuallyClosed = false;
 
   this._queue = [];
 
@@ -103,7 +102,7 @@ Sock.prototype._superEmit = Sock.prototype.emit;
  */
 Sock.prototype.end = function () {
   if (this._connected) {
-    this._shouldReconnect = false;
+    this._manuallyClosed = true;
     this._socket.end();
   }
 };
@@ -113,7 +112,7 @@ Sock.prototype.end = function () {
  */
 Sock.prototype.destroy = function () {
   if (this._connected) {
-    this._shouldReconnect = false;
+    this._manuallyClosed = true;
     this._socket.destroy();
   }
 };
@@ -125,7 +124,9 @@ Sock.prototype.destroy = function () {
  */
 Sock.prototype.connect = function () {
   if (!this._connected) {
-    this._socket = net.createConnection(this._opts);
+    this._manuallyClosed = false;
+    this._socket = net.createConnection(this._opts)
+        .setTimeout(this._timeout);
     this._bindEvents();
   }
 };
@@ -210,7 +211,7 @@ Sock.prototype._bindEvents = function () {
 
   this._socket.on('close', function (isError) {
     _this._connected = false;
-    if (_this._shouldReconnect) {
+    if (_this._shouldReconnect &amp;&amp; !_this._manuallyClosed) {
       _this._reconnect();
     }
 
@@ -223,14 +224,21 @@ Sock.prototype._bindEvents = function () {
   });
 
   this._socket.on('error', function (err) {
-    if (!_this._shouldReconnect) {
-      /**
-       * Error event from net.Socket.
-       *
-       * @event Sock#error
-       */
-      _this._superEmit('error', err);
-    }
+    /**
+     * Error event from net.Socket.
+     *
+     * @event Sock#error
+     */
+    _this._superEmit('error', err);
+  });
+
+  this._socket.on('timeout', function () {
+    /**
+     * Timeout event from net.Socket.
+     *
+     * @event Sock#timeout
+     */
+    _this._superEmit('timeout');
   });
 };
 
@@ -292,13 +300,13 @@ module.exports = Sock;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Server.html">Server</a></li><li><a href="Sock.html">Sock</a></li><li><a href="Socket.html">Socket</a></li></ul><h3>Events</h3><ul><li><a href="Sock.html#event:close">close</a></li><li><a href="Sock.html#event:end">end</a></li><li><a href="Sock.html#event:error">error</a></li><li><a href="Sock.html#event:reconnecting">reconnecting</a></li><li><a href="Sock.html#event:socket_connect">socket_connect</a></li><li><a href="Socket.html#event:close">close</a></li><li><a href="Socket.html#event:connect">connect</a></li><li><a href="Socket.html#event:end">end</a></li><li><a href="Socket.html#event:error">error</a></li><li><a href="Socket.html#event:reconnecting">reconnecting</a></li><li><a href="Socket.html#event:socket_connect">socket_connect</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Server.html">Server</a></li><li><a href="Sock.html">Sock</a></li><li><a href="Socket.html">Socket</a></li></ul><h3>Events</h3><ul><li><a href="Sock.html#event:close">close</a></li><li><a href="Sock.html#event:end">end</a></li><li><a href="Sock.html#event:error">error</a></li><li><a href="Sock.html#event:reconnecting">reconnecting</a></li><li><a href="Sock.html#event:socket_connect">socket_connect</a></li><li><a href="Sock.html#event:timeout">timeout</a></li><li><a href="Socket.html#event:close">close</a></li><li><a href="Socket.html#event:connect">connect</a></li><li><a href="Socket.html#event:end">end</a></li><li><a href="Socket.html#event:error">error</a></li><li><a href="Socket.html#event:reconnecting">reconnecting</a></li><li><a href="Socket.html#event:socket_connect">socket_connect</a></li><li><a href="Socket.html#event:timeout">timeout</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Aug 26 2016 10:32:08 GMT+0100 (IST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Sep 01 2016 11:20:06 GMT+0100 (IST)
 </footer>
 
 <script> prettyPrint(); </script>
