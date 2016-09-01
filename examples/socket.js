@@ -40,10 +40,6 @@ socket.on('error', function (err) {
   console.log(err.message);
 });
 
-socket.on('timeout', function () {
-  console.log('Socket timed-out');
-});
-
 setInterval(function () {
   socket.emit('event1', 'Hello, World ' + ut.randomNumber(1, 100) + '!');
 }, 2500);
