@@ -13,6 +13,7 @@ var socket = new Socket({
   //autoConnect: true,
   //useQueue: true,
   //queueSize: 100
+  //timeout: 5000
 });
 
 socket.on('data', function (data) {
@@ -37,6 +38,10 @@ socket.on('close', function () {
 
 socket.on('error', function (err) {
   console.log(err.message);
+});
+
+socket.on('timeout', function () {
+  console.log('Socket timed-out');
 });
 
 setInterval(function () {
