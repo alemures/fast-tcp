@@ -15,6 +15,9 @@ npm install fast-tcp
 * Rooms
 * AS FAST AS LIGHT!
 
+## Client Libraries
+* [fast-tcp-java](https://github.com/alemures/fast-tcp-java)
+
 ## Samples
 Server:
 ```
