@@ -20,7 +20,7 @@ npm install fast-tcp
 
 ## Samples
 Server:
-```
+```javascript
 var Server = require('fast-tcp').Server;
 
 var server = new Server();
@@ -37,7 +37,7 @@ server.listen(5000);
 ```
 
 Client:
-```
+```javascript
 var Socket = require('fast-tcp').Socket;
 var socket = new Socket({
   host: 'localhost',
