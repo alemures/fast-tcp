@@ -18,7 +18,7 @@ User.prototype.toBuffer = function () {
 
 var server = new Server({
   // Creates an object instance from a binary buffer
-  objectDeserializer: function (buffer) {
+  objectDeserializer: function (buffer, event) {
     return User.fromBuffer(buffer);
   }
 });
@@ -41,7 +41,7 @@ var socket = new Socket({
   port: 5000,
 
   // Convert the object to a binary buffer
-  objectSerializer: function (user) {
+  objectSerializer: function (user, event) {
     return user.toBuffer();
   }
 });
