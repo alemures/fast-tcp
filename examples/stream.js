@@ -1,20 +1,29 @@
 'use strict';
 
-var Server = require('../index').Server;
 var Readable = require('stream').Readable;
 var Writable = require('stream').Writable;
 
+var Server = require('../index').Server;
+
 var server = new Server();
 server.on('connection', function (socket) {
-  socket.on('numbers', function (stream) {
-    var myWritable = new Writable({
-      write: function (chunk, encoding, callback) {
-        console.log(chunk.toString());
-        setTimeout(()=>callback(),10)
+  socket.on('streaming_dashes', function (info, readStream) {
+    console.log('Starting streaming info: ', info);
+
+    var writeStream = new Writable({
+      write: function (chunk, encoding, cb) {
+        setTimeout(function () {
+          console.log('Chunk received of', chunk.length, 'bytes');
+          cb();
+        }, 100);
       }
     });
 
-    stream.pipe(myWritable);
+    writeStream.on('finish', function () {
+      console.log('Streaming finished');
+    });
+
+    readStream.pipe(writeStream);
   });
 });
 
@@ -26,11 +35,18 @@ var socket = new Socket({
   port: 5000
 });
 
-var c = 0;
-var myReadable = new Readable({
+var longString = new Array(100001).join('-');
+
+var counter = 0;
+var max = 25;
+var readStream = new Readable({
   read: function (size) {
-    if (c++ < 100000) {
-      this.push('Data ' + c);
+    var _this = this;
+
+    if (counter++ < max) {
+      setTimeout(function () {
+        _this.push(longString);
+      }, 50);
     } else {
       this.push(null);
     }
@@ -38,5 +54,6 @@ var myReadable = new Readable({
 });
 
 socket.on('connect', function () {
-  myReadable.pipe(socket.stream('numbers'));
+  readStream.pipe(socket.stream('streaming_dashes',
+      { size: (longString.length * max) + ' bytes' }));
 });
