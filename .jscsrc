@@ -1,5 +1,5 @@
 {
-    "preset": "airbnb",
-    "disallowTrailingComma": true,
-    "requireTrailingComma": null
+  "preset": "airbnb",
+  "disallowTrailingComma": true,
+  "requireTrailingComma": null
 }

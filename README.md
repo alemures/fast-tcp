@@ -3,7 +3,7 @@ fast-tcp
 
 fast-tcp is an extremely fast TCP client and server that allows to emit and listen to events. The messages are sent in binary format using Buffer and TCP, standard modules of Node.JS.
 
-In order to get the maximum performance, every data type is sent using the fastest way to write it into the underline Buffer. Integer numbers are sent as a signed integer of 48 bits, decimal numbers as double of 64 bits, strings as utf8 string, buffers as raw bytes and objects as utf8 string using JSON.stringify() / JSON.parse() javascript functions. In this way, sending a string is faster than an object, numbers are faster than strings and buffers are the fastest because they are just copied without any transformation.
+In order to get the maximum performance, every data type is sent using the fastest way to write it into the underline Buffer. Integer numbers are sent as a signed integer of 48 bits, decimal numbers as double of 64 bits, strings as utf8 string, buffers as binary and objects as binary using JSON.stringify / JSON.parse (it can be configured).
 
 ## Install
 npm install fast-tcp
@@ -13,6 +13,7 @@ npm install fast-tcp
 * Configurable automatic reconnection
 * Callbacks for particular emits
 * Rooms
+* Configurable object serializer/deserializer (Protocol Buffer, avro, MessagePack, etc)
 * AS FAST AS LIGHT!
 
 ## Client Libraries
