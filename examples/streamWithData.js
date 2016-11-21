@@ -53,7 +53,5 @@ var readStream = new Readable({
   }
 });
 
-socket.on('connect', function () {
-  readStream.pipe(socket.stream('streaming_dashes',
-      { size: (longString.length * max) + ' bytes' }));
-});
+readStream.pipe(socket.stream('streaming_dashes',
+    { size: (longString.length * max) + ' bytes' }));
