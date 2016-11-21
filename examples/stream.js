@@ -19,6 +19,4 @@ var socket = new Socket({
   port: 5000
 });
 
-socket.on('connect', function () {
-  fs.createReadStream('img.jpg').pipe(socket.stream('image', { name: 'img.jpg' }));
-});
+fs.createReadStream('img.jpg').pipe(socket.stream('image', { name: 'img.jpg' }));
