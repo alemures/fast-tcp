@@ -14,6 +14,7 @@ npm install fast-tcp
 * Callbacks for particular emits
 * Rooms
 * Configurable object serializer/deserializer (Protocol Buffer, avro, MessagePack, etc)
+* Binary streams over fast-tcp protocol
 * AS FAST AS LIGHT!
 
 ## Client Libraries
