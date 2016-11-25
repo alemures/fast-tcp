@@ -5,7 +5,7 @@ fast-tcp is an extremely fast TCP client and server that allows to emit and list
 
 In order to get the maximum performance, every data type is sent using the fastest way to write it into the underline Buffer. Integer numbers are sent as signed integers of 48 bits, decimal numbers as double of 64 bits, boolean as byte, strings as utf8 string, buffers as binary, objects are serialized as binary and streams are transmitted in binary over the fast-tcp protocol.
 
-In order to be flexible sending objects, by default, they are serialized/deserialized using JSON.stringify/JSON.parse so, sending a Javascript object is possible out of the box. It is also possible to override the objects serialization so, you can use existing ones like Protocol Buffer, avro, MessagePack or even you own implementation.
+To be flexible sending objects, by default, they are serialized/deserialized using JSON.stringify/JSON.parse so, sending a Javascript object is possible out of the box. It is also possible to override the objects serialization so, you can use existing ones like Protocol Buffer, avro, MessagePack or even you own implementation.
 
 ## Install
 npm install fast-tcp
