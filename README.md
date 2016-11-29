@@ -75,6 +75,7 @@ socket.emit('login', 'alejandro', function (response) {
 ```
 
 #### Broadcast messages and rooms
+From client:
 ```javascript
 // Broadcast event to everyone, exclude sender
 socket.emit('hello', 'Hello, World!', { broadcast: true });
@@ -90,6 +91,67 @@ socket.emit('hello', 'Hello, Room!', { rooms: ['room_name'], sockets: [socket.id
 
 // Send event to individual "socket_id"
 socket.emit('hello', 'Hello, Socket!', { sockets: ['socket_id'] });
+```
+
+From server:
+```javascript
+// Broadcast event to everyone
+server.emit('hello', 'Hello, World!');
+
+// Broadcast event to everyone, with exceptions
+server.emit('hello', 'Hello, Room!', { except: ['socket_id'] });
+
+// Broadcast event to everyone in room "room_name"
+server.emit('hello', 'Hello, Room!', { rooms: ['room_name'] });
+
+// Broadcast event to everyone in room "room_name", with exceptions
+server.emit('hello', 'Hello, Room!', { rooms: ['room_name'], except: ['socket_id'] });
+
+// Send event to individual "socket_id"
+server.emit('hello', 'Hello, Socket!', { sockets: ['socket_id'] });
+```
+
+#### Configurable object serializer/deserializer
+```javascript
+var server = new Server({
+    objectSerializer: function (user, event) {
+        return user.toBuffer();
+    },
+    objectDeserializer: function (buffer, event) {
+        return User.fromBuffer(buffer);
+    }
+});
+
+server.on('connection', function (socket) {
+    socket.on('login', function (user, cb) {
+        console.log(user.getUsername() + ' : ' + user.getPassword());
+    });
+});
+
+// Client
+var socket = new Socket({
+    ...
+    objectSerializer: function (user, event) {
+        return user.toBuffer();
+    },
+    objectDeserializer: function (buffer, event) {
+        return User.fromBuffer(buffer);
+    }
+});
+
+socket.emit('login', new User('alex', '1234'));
+```
+
+#### High performance binary streams
+```javascript
+server.on('connection', function (socket) {
+    socket.on('image', function (info, readStream) {
+        readStream.pipe(fs.createWriteStream(info.name));
+    });
+});
+
+// Client
+fs.createReadStream('img.jpg').pipe(socket.stream('image', { name: 'img.jpg' }));
 ```
 
 Check out the folder `examples/` for more samples.
