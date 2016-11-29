@@ -5,14 +5,14 @@ fast-tcp is an extremely fast TCP client and server that allows to emit and list
 
 In order to get the maximum performance, every data type is sent using the fastest way to write it into the underline Buffer. Integer numbers are sent as signed integers of 48 bits, decimal numbers as double of 64 bits, boolean as byte, strings as utf8 string, buffers as binary, objects are serialized as binary and streams are transmitted in binary over the fast-tcp protocol.
 
-To be flexible sending objects, by default, they are serialized/deserialized using JSON.stringify/JSON.parse so, sending a Javascript object is possible out of the box. It is also possible to override the objects serialization so, you can use existing ones like Protocol Buffer, avro, MessagePack or even you own implementation.
+To be flexible sending objects, by default, they are serialized/deserialized using JSON.stringify/JSON.parse so, sending a Javascript object is possible out of the box. It is also possible to override the objects serialization so, you can use third-party libraries like Protocol Buffer, avro, MessagePack or even your own implementation.
 
 ## Install
 npm install fast-tcp
 
 ## Features
 * All primitive data types are supported (boolean, string, number, object, buffer)
-* Configurable automatic reconnection
+* Configurable client reconnection
 * Callbacks in message reception (acknowledgements)
 * Broadcast messages and rooms
 * Configurable object serializer/deserializer (Protocol Buffer, avro, MessagePack, etc)
@@ -32,9 +32,9 @@ var Socket = require('fast-tcp').Socket;
 
 var server = new Server();
 server.on('connection', function (socket) {
-    socket.on('login', function (username) {
-      console.log('Trying to login: ' + username);
-    });
+  socket.on('login', function (username) {
+    console.log('Trying to login: ' + username);
+  });
 });
 server.listen(5000);
 
@@ -45,32 +45,31 @@ var socket = new Socket({
 socket.emit('login', 'alejandro');
 ```
 
-#### Configurable automatic reconnection
+#### Configurable client reconnection
 ```javascript
 var socket = new Socket({
-    host: 'localhost',
-    port: 5000,
-    reconnect: true, // (true by default)
-    reconnectInterval: 2000 // (1000ms by default)
+  ...
+  reconnect: true, // (true by default)
+  reconnectInterval: 2000 // (1000ms by default)
 });
 
 // It's required, otherwise node.js will throw an "Unhandled 'error' event"
 socket.on('error', function (err) {
-    console.error(err);
+  console.error(err);
 });
 ```
 
 #### Callbacks in message reception (acknowledgements)
 ```javascript
 server.on('connection', function (socket) {
-    socket.on('login', function (username, callback) {
-        callback(username === 'alejandro' ? true : false);
-    });
+  socket.on('login', function (username, callback) {
+    callback(username === 'alejandro' ? true : false);
+  });
 });
 
 // Client
 socket.emit('login', 'alejandro', function (response) {
-    console.log('Response: ' + response);
+  console.log('Response: ' + response);
 });
 ```
 
@@ -92,6 +91,7 @@ socket.emit('hello', 'Hello, Room!', { rooms: ['room_name'], sockets: [socket.id
 // Send event to individual "socket_id"
 socket.emit('hello', 'Hello, Socket!', { sockets: ['socket_id'] });
 ```
+> To use the *socket#id* attribute you must wait for the event 'connect'.
 
 From server:
 ```javascript
@@ -99,7 +99,7 @@ From server:
 server.emit('hello', 'Hello, World!');
 
 // Broadcast event to everyone, with exceptions
-server.emit('hello', 'Hello, Room!', { except: ['socket_id'] });
+server.emit('hello', 'Hello, World!', { except: ['socket_id'] });
 
 // Broadcast event to everyone in room "room_name"
 server.emit('hello', 'Hello, Room!', { rooms: ['room_name'] });
@@ -114,29 +114,23 @@ server.emit('hello', 'Hello, Socket!', { sockets: ['socket_id'] });
 #### Configurable object serializer/deserializer
 ```javascript
 var server = new Server({
-    objectSerializer: function (user, event) {
-        return user.toBuffer();
-    },
-    objectDeserializer: function (buffer, event) {
-        return User.fromBuffer(buffer);
-    }
+  objectDeserializer: function (buffer, event) {
+    return User.fromBuffer(buffer);
+  }
 });
 
 server.on('connection', function (socket) {
-    socket.on('login', function (user, cb) {
-        console.log(user.getUsername() + ' : ' + user.getPassword());
-    });
+  socket.on('login', function (user) {
+    console.log(user.getUsername() + '->' + user.getPassword());
+  });
 });
 
 // Client
 var socket = new Socket({
-    ...
-    objectSerializer: function (user, event) {
-        return user.toBuffer();
-    },
-    objectDeserializer: function (buffer, event) {
-        return User.fromBuffer(buffer);
-    }
+  ...
+  objectSerializer: function (user, event) {
+    return user.toBuffer();
+  }
 });
 
 socket.emit('login', new User('alex', '1234'));
@@ -145,9 +139,9 @@ socket.emit('login', new User('alex', '1234'));
 #### High performance binary streams
 ```javascript
 server.on('connection', function (socket) {
-    socket.on('image', function (info, readStream) {
-        readStream.pipe(fs.createWriteStream(info.name));
-    });
+  socket.on('image', function (info, readStream) {
+    readStream.pipe(fs.createWriteStream(info.name));
+  });
 });
 
 // Client

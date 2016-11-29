@@ -25,7 +25,7 @@
     "jscs": "jscs index.js lib/*.js test/*.js examples/*.js",
     "jscs:fix": "jscs --fix index.js lib/*.js test/*.js examples/*.js",
     "check": "npm run test && npm run jshint && npm run jscs && npm outdated",
-    "doc": "rm -rf ./doc && jsdoc ./lib/ ./package.json ./README.md -d ./doc"
+    "doc": "jsdoc ./lib/ ./package.json ./README.md -d ./doc"
   },
   "repository": {
     "type": "git",
