@@ -76,6 +76,15 @@ socket.emit('login', 'alejandro', function (response) {
 #### Broadcast messages and rooms
 From client:
 ```javascript
+// Join room
+socket.join('room_name');
+
+// Leave room
+socket.leave('room_name');
+
+// Leave all rooms
+socket.leaveAll();
+
 // Broadcast event to everyone, exclude sender
 socket.emit('hello', 'Hello, World!', { broadcast: true });
 
@@ -95,6 +104,15 @@ socket.emit('hello', 'Hello, Socket!', { sockets: ['socket_id'] });
 
 From server:
 ```javascript
+// Join room
+server.join('room_name', 'socket_id');
+
+// Leave room
+server.leave('room_name', 'socket_id');
+
+// Leave all rooms
+server.leaveAll('socket_id');
+
 // Broadcast event to everyone
 server.emit('hello', 'Hello, World!');
 
