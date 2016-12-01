@@ -157,7 +157,7 @@ socket.emit('login', new User('alex', '1234'));
 #### High performance binary streams
 ```javascript
 server.on('connection', function (socket) {
-  socket.on('image', function (info, readStream) {
+  socket.on('image', function (readStream, info) {
     readStream.pipe(fs.createWriteStream(info.name));
   });
 });

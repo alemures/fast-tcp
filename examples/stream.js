@@ -7,7 +7,7 @@ var Socket = require('../index').Socket;
 
 var server = new Server();
 server.on('connection', function (socket) {
-  socket.on('image', function (info, readStream) {
+  socket.on('image', function (readStream, info) {
     readStream.pipe(fs.createWriteStream(info.name));
   });
 });
