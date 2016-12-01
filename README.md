@@ -13,7 +13,7 @@ npm install fast-tcp
 ## Features
 * All primitive data types are supported (boolean, string, number, object, buffer)
 * Configurable client reconnection
-* Callbacks in message reception (acknowledgements)
+* Callbacks in message and stream reception (acknowledgements)
 * Broadcast messages and rooms
 * Configurable object serializer/deserializer (Protocol Buffer, avro, MessagePack, etc)
 * High performance binary streams over fast-tcp protocol
@@ -163,7 +163,7 @@ server.on('connection', function (socket) {
 });
 
 // Client
-fs.createReadStream('img.jpg').pipe(socket.stream('image', { name: 'img.jpg' }));
+fs.createReadStream('img.jpg').pipe(socket.stream('image', { name: 'img-copy.jpg' }));
 ```
 
 Check out the folder `examples/` for more samples.
