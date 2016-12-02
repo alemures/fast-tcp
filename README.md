@@ -1,7 +1,7 @@
 fast-tcp
 ===
 
-fast-tcp is an extremely fast TCP client and server that allows to emit and listen to events. It also provides more features like streaming, message acknowledgements, broadcast messages, rooms, etc.
+fast-tcp is an extremely fast TCP client and server that allows to emit and listen to events. It also provides more features like binary streaming, acknowledgements, broadcasts, rooms, etc.
 
 In order to get the maximum performance, every data type is sent using the fastest way to write it into the underline Buffer. Integer numbers are sent as signed integers of 48 bits, decimal numbers as double of 64 bits, boolean as byte, strings as utf8 string, buffers as binary, objects are serialized as binary and streams are transmitted in binary over the fast-tcp protocol.
 
@@ -14,7 +14,7 @@ npm install fast-tcp
 * All primitive data types are supported (boolean, string, number, object, buffer)
 * Configurable client reconnection
 * Callbacks in message and stream reception (acknowledgements)
-* Broadcast messages and rooms
+* Broadcasts, rooms and client to client messages and streams
 * Configurable object serializer/deserializer (Protocol Buffer, avro, MessagePack, etc)
 * High performance binary streams over fast-tcp protocol
 * AS FAST AS LIGHT!
@@ -59,7 +59,8 @@ socket.on('error', function (err) {
 });
 ```
 
-#### Callbacks in message reception (acknowledgements)
+#### Callbacks in message and stream reception (acknowledgements)
+For messages:
 ```javascript
 server.on('connection', function (socket) {
   socket.on('login', function (username, callback) {
@@ -72,8 +73,27 @@ socket.emit('login', 'alejandro', function (response) {
   console.log('Response: ' + response);
 });
 ```
+For streams:
+```javascript
+server.on('connection', function (socket) {
+  socket.on('image', function (readStream, info, callback) {
+    var writeStream = fs.createWriteStream(info.name);
+    readStream.pipe(writeStream);
 
-#### Broadcast messages and rooms
+    writeStream.on('finish', function () {
+      callback('Image "' + info.name + '" stored!');
+    });
+  });
+});
+
+// Client
+var writeStream = socket.stream('image', { name: 'img-copy.jpg' }, function (response) {
+  console.log('Response: ' + response);
+});
+fs.createReadStream('img.jpg').pipe(writeStream);
+```
+
+#### Broadcasts, rooms and client to client messages and streams
 From client:
 ```javascript
 // Join room
@@ -88,17 +108,26 @@ socket.leaveAll();
 // Broadcast event to everyone, exclude sender
 socket.emit('hello', 'Hello, World!', { broadcast: true });
 
+// Broadcast stream to everyone, exclude sender
+var writeStream = socket.stream('hello', 'Hello, World!', { broadcast: true });
+
 // Broadcast event to everyone, include sender
 socket.emit('hello', 'Hello, World!', { broadcast: true, sockets: [socket.id] });
 
 // Broadcast event to everyone in room "room_name", exclude sender
 socket.emit('hello', 'Hello, Room!', { rooms: ['room_name'] });
 
+// Broadcast stream to everyone in room "room_name", exclude sender
+var writeStream = socket.stream('hello', 'Hello, World!', { rooms: ['room_name'] });
+
 // Broadcast event to everyone in room "room_name", include sender
 socket.emit('hello', 'Hello, Room!', { rooms: ['room_name'], sockets: [socket.id] });
 
 // Send event to individual "socket_id"
 socket.emit('hello', 'Hello, Socket!', { sockets: ['socket_id'] });
+
+// Open stream to individual "socket_id"
+var writeStream = socket.stream('hello', 'Hello, World!', { sockets: ['socket_id'] });
 ```
 > To use the *socket#id* attribute you must wait for the event 'connect'.
 
@@ -116,17 +145,32 @@ server.leaveAll('socket_id');
 // Broadcast event to everyone
 server.emit('hello', 'Hello, World!');
 
+// Broadcast stream to everyone
+var writeStream = server.stream('hello', 'Hello, World!');
+
 // Broadcast event to everyone, with exceptions
 server.emit('hello', 'Hello, World!', { except: ['socket_id'] });
+
+// Broadcast stream to everyone, with exceptions
+var writeStream = server.stream('hello', 'Hello, World!', { except: ['socket_id'] });
 
 // Broadcast event to everyone in room "room_name"
 server.emit('hello', 'Hello, Room!', { rooms: ['room_name'] });
 
+// Broadcast stream to everyone in room "room_name"
+var writeStream = server.stream('hello', 'Hello, Room!', { rooms: ['room_name'] });
+
 // Broadcast event to everyone in room "room_name", with exceptions
 server.emit('hello', 'Hello, Room!', { rooms: ['room_name'], except: ['socket_id'] });
 
+// Broadcast stream to everyone in room "room_name", with exceptions
+var writeStream = server.stream('hello', 'Hello, Room!', { rooms: ['room_name'], except: ['socket_id'] });
+
 // Send event to individual "socket_id"
 server.emit('hello', 'Hello, Socket!', { sockets: ['socket_id'] });
+
+// Open stream to individual "socket_id"
+var writeStream = server.stream('hello', 'Hello, Socket!', { sockets: ['socket_id'] });
 ```
 
 #### Configurable object serializer/deserializer
@@ -163,7 +207,8 @@ server.on('connection', function (socket) {
 });
 
 // Client
-fs.createReadStream('img.jpg').pipe(socket.stream('image', { name: 'img-copy.jpg' }));
+var writeStream = socket.stream('image', { name: 'img-copy.jpg' });
+fs.createReadStream('img.jpg').pipe(writeStream);
 ```
 
 Check out the folder `examples/` for more samples.

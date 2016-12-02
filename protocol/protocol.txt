@@ -37,6 +37,7 @@ Data Type
 - 4. decimal
 - 5. object (Transmitted as binary)
 - 6. boolean (Transmitted as byte)
+- 7. empty (Length = 0)
 
 
 Message Type
@@ -55,4 +56,8 @@ Message Type
 - 11. Data stream open
 - 12. Data stream
 - 13. Data stream close
+- 14. Data stream open with ack
+- 15. Data stream open to socket
+- 16. Data stream open to room
+- 17. Data stream open to broadcast
  

@@ -19,4 +19,5 @@ var socket = new Socket({
   port: 5000
 });
 
-fs.createReadStream('img.jpg').pipe(socket.stream('image', { name: 'img-copy.jpg' }));
+var writeStream = socket.stream('image', { name: 'img-copy.jpg' });
+fs.createReadStream('img.jpg').pipe(writeStream);

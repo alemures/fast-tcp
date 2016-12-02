@@ -7,12 +7,12 @@ var Socket = require('../index').Socket;
 
 var server = new Server();
 server.on('connection', function (socket) {
-  socket.on('image', function (readStream, info, cb) {
+  socket.on('image', function (readStream, info, callback) {
     var writeStream = fs.createWriteStream(info.name);
     readStream.pipe(writeStream);
 
-    writeStream.on('close', function () {
-      cb('Image "' + info.name + '" stored!');
+    writeStream.on('finish', function () {
+      callback('Image "' + info.name + '" stored!');
     });
   });
 });
@@ -23,7 +23,9 @@ var socket = new Socket({
   host: 'localhost',
   port: 5000
 });
-fs.createReadStream('img.jpg').pipe(socket.stream('image', { name: 'img-copy.jpg' },
-    function (response) {
+
+var writeStream = socket.stream('image', { name: 'img-copy.jpg' }, function (response) {
   console.log('Response: ' + response);
-}));
+});
+
+fs.createReadStream('img.jpg').pipe(writeStream);
