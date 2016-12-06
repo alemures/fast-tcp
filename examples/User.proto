@@ -1,7 +1,0 @@
-package fasttcp;
-syntax = "proto3";
-
-message User {
-    string username = 1;
-    string password = 2;
-}

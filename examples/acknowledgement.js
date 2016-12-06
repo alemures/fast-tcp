@@ -1,14 +1,12 @@
 'use strict';
 
-var fs = require('fs');
-
 var Server = require('../index').Server;
 var Socket = require('../index').Socket;
 
 var server = new Server();
 server.on('connection', function (socket) {
-  socket.on('image', function (readStream, info) {
-    readStream.pipe(fs.createWriteStream(info.name));
+  socket.on('login', function (username, callback) {
+    callback(username === 'alex' ? true : false);
   });
 });
 
@@ -18,6 +16,6 @@ var socket = new Socket({
   host: 'localhost',
   port: 5000
 });
-
-var writeStream = socket.stream('image', { name: 'img-copy.jpg' });
-fs.createReadStream('img.jpg').pipe(writeStream);
+socket.emit('login', 'alex', function (response) {
+  console.log('Response: ' + response);
+});

@@ -1,12 +1,20 @@
 'use strict';
 
 var Server = require('../index').Server;
+var Socket = require('../index').Socket;
 
-// Custom Object
 function User(username, password) {
   this.username = username;
   this.password = password;
 }
+
+User.prototype.getUsername = function () {
+  return this.username;
+};
+
+User.prototype.getPassword = function () {
+  return this.password;
+};
 
 User.fromBuffer = function (buffer) {
   return new User(buffer.toString().split(':')[0], buffer.toString().split(':')[1]);
@@ -24,18 +32,13 @@ var server = new Server({
 });
 
 server.on('connection', function (socket) {
-  socket.on('login', function (user, cb) {
-    if (user.username === 'Alex' && user.password === '1234') {
-      cb('Login correct!');
-    } else {
-      cb('Access denied!');
-    }
+  socket.on('login', function (user) {
+    console.log(user.getUsername() + ' -> ' + user.getPassword());
   });
 });
 
 server.listen(5000);
 
-var Socket = require('../index').Socket;
 var socket = new Socket({
   host: 'localhost',
   port: 5000,
@@ -46,6 +49,4 @@ var socket = new Socket({
   }
 });
 
-socket.emit('login', new User('Alex', '1234'), function (result) {
-  console.log('Login result:', result);
-});
+socket.emit('login', new User('alex', '1234'));
