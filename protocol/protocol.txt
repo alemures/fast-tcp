@@ -43,6 +43,7 @@ Data Type
 Message Type
 ------------
 
+- 0. Error
 - 1. Register
 - 2. Data
 - 3. Data to socket
