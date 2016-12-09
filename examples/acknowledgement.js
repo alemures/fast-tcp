@@ -5,8 +5,8 @@ var Socket = require('../index').Socket;
 
 var server = new Server();
 server.on('connection', function (socket) {
-  socket.on('login', function (username) {
-    console.log('Trying to login: ' + username);
+  socket.on('login', function (username, callback) {
+    callback(username === 'alex' ? true : false);
   });
 });
 
@@ -16,4 +16,6 @@ var socket = new Socket({
   host: 'localhost',
   port: 5000
 });
-socket.emit('login', 'alex');
+socket.emit('login', 'alex', function (response) {
+  console.log('Response: ' + response);
+});

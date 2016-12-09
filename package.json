@@ -1,11 +1,11 @@
 {
   "name": "fast-tcp",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "fast-tcp is an extremely fast TCP client and server that allows to emit and listen to events",
   "author": "Alejandro Santiago Nieto",
   "license": "MIT",
   "dependencies": {
-    "utjs": "1.x.x"
+    "utjs": "2.x.x"
   },
   "devDependencies": {
     "chai": "3.x.x",
@@ -20,13 +20,12 @@
     "lib"
   ],
   "scripts": {
-    "start": "node index.js",
     "test": "mocha test/*.js",
     "jshint": "jshint index.js lib/*.js test/*.js examples/*.js",
     "jscs": "jscs index.js lib/*.js test/*.js examples/*.js",
     "jscs:fix": "jscs --fix index.js lib/*.js test/*.js examples/*.js",
     "check": "npm run test && npm run jshint && npm run jscs && npm outdated",
-    "doc": "rm -rf ./doc && jsdoc ./lib/ ./package.json ./README.md -d ./doc"
+    "doc": "jsdoc ./lib/ ./package.json ./README.md -d ./doc"
   },
   "repository": {
     "type": "git",

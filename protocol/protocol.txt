@@ -1,7 +1,7 @@
 = fast-tcp Protocol =
 
 Message Format
-------------
+--------------
 
 +---------------+---------+-------+----------+-------------+-----------+-------------+--------+------------+------+
 |   uInt32LE    |  byte   | byte  |   byte   |    byte     | uInt32LE  |  uInt16LE   | string |  uInt32LE  |  *   |
@@ -9,7 +9,7 @@ Message Format
 | messageLength | version | flags | dataType | messageType | messageId | eventLength | event  | dataLength | data |
 +---------------+---------+-------+----------+-------------+-----------+-------------+--------+------------+------+
 
-*  The data type can be int48LE, double64LE, string, object or buffer.
+*  The data type can be byte, int48LE, double64LE, utf8 string or binary.
 
 
 Version
@@ -32,15 +32,18 @@ Data Type
 ---------
 
 - 1. string
-- 2. buffer
-- 3. int
-- 4. double
-- 5. object
+- 2. binary
+- 3. integer
+- 4. decimal
+- 5. object (Transmitted as binary)
+- 6. boolean (Transmitted as byte)
+- 7. empty (Length = 0)
 
 
 Message Type
 ------------
 
+- 0. Error
 - 1. Register
 - 2. Data
 - 3. Data to socket
@@ -51,4 +54,11 @@ Message Type
 - 8. Join room
 - 9. Leave room
 - 10. Leave all rooms
+- 11. Data stream open
+- 12. Data stream
+- 13. Data stream close
+- 14. Data stream open with ack
+- 15. Data stream open to socket
+- 16. Data stream open to room
+- 17. Data stream open to broadcast
  
