@@ -40,14 +40,14 @@
 
     
 
-    <h4 class="name" id="Socket"><span class="type-signature"></span>new Socket<span class="signature">(opts<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Socket"><span class="type-signature"></span>new Socket<span class="signature">(opts)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Client socket.
+    The client socket.
 </div>
 
 
@@ -70,8 +70,6 @@
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
         
 
         
@@ -98,20 +96,10 @@
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last">The Sock and net.Socket options.
+            <td class="description last">The Socket and net.Socket options.
                 <h6>Properties</h6>
                 
 
@@ -334,7 +322,7 @@
             
 
             <td class="description last">The max size of the queue. If the queue is
-       full, new messages will be added and the oldest will be removed.</td>
+       full, new messages will replace old ones.</td>
         </tr>
 
     
@@ -374,10 +362,92 @@
             
 
             <td class="description last">Sets the socket to timeout after opts.timeout milliseconds
-                                 of inactivity on the socket. When an idle timeout is triggered
-                                 the socket will emit an 'error' event and the connection
-                                 will be destroyed. If timeout is 0, then the existing idle timeout
-                                 is disabled.</td>
+       of inactivity on the socket. When an idle timeout is triggered the socket will emit
+       an 'error' event and the connection will be destroyed. If timeout is 0, then the
+       existing idle timeout is disabled.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>objectSerializer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    JSON.stringify
+                
+                </td>
+            
+
+            <td class="description last">Serializes an object into a binary
+       buffer. This functions allows you to implement custom serialization protocols for
+       the data or even use other known protocols like "Protocol Buffers" or  "MessagePack".</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>objectDeserializer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    JSON.parse
+                
+                </td>
+            
+
+            <td class="description last">Deserializes a binary buffer into an
+       object. This functions allows you to implement custom serialization protocols for the
+       data type "object" or even use other known protocols like "Protocol Buffers" or
+       "MessagePack".</td>
         </tr>
 
     
@@ -425,7 +495,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line37">line 37</a>
+        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line44">line 44</a>
     </li></ul></dd>
     
 
@@ -447,6 +517,8 @@
     <li><a href="Socket.html#event:reconnecting">Socket#event:reconnecting</a></li>
 
     <li><a href="Socket.html#event:socket_connect">Socket#event:socket_connect</a></li>
+
+    <li><a href="Socket.html#event:socket_drain">Socket#event:socket_drain</a></li>
 
     <li><a href="Socket.html#event:end">Socket#event:end</a></li>
 
@@ -501,7 +573,7 @@
 
 
 <div class="description">
-    A unique identificator for this socket.
+    A unique identifier. It will be set up asynchronously from the server in the event 'connect'.
 </div>
 
 
@@ -554,7 +626,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line51">line 51</a>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -639,7 +711,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line96">line 96</a>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line102">line 102</a>
     </li></ul></dd>
     
 
@@ -726,7 +798,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line84">line 84</a>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
@@ -757,7 +829,7 @@ in the constructor.
 
     
 
-    <h4 class="name" id="emit"><span class="type-signature"></span>emit<span class="signature">(event, data, param<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="emit"><span class="type-signature"></span>emit<span class="signature">(event, data, param<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
 
     
 
@@ -849,6 +921,9 @@ in the constructor.
 |
 
 <span class="param-type">Buffer</span>
+|
+
+<span class="param-type">Boolean</span>
 
 
             
@@ -1090,7 +1165,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line54">line 54</a>
+        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -1113,6 +1188,30 @@ in the constructor.
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    true if the entire data was flushed successfully. false if all or part of
+        the data was queued in user memory. 'socket_drain' will be emitted when the buffer
+        is again free.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Boolean</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1177,7 +1276,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line74">line 74</a>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -1208,7 +1307,7 @@ in the constructor.
 
     
 
-    <h4 class="name" id="getVersion"><span class="type-signature"></span>getVersion<span class="signature">()</span><span class="type-signature"> &rarr; {Number}</span></h4>
+    <h4 class="name" id="getSerializerVersion"><span class="type-signature"></span>getSerializerVersion<span class="signature">()</span><span class="type-signature"> &rarr; {Number}</span></h4>
 
     
 
@@ -1239,7 +1338,7 @@ in the constructor.
     
     <dt class="inherited-from">Inherited From:</dt>
     <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="Sock.html#getVersion">Sock#getVersion</a>
+        <a href="Sock.html#getSerializerVersion">Sock#getSerializerVersion</a>
     </li></ul></dd>
     
 
@@ -1264,7 +1363,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line109">line 109</a>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line115">line 115</a>
     </li></ul></dd>
     
 
@@ -1367,6 +1466,9 @@ in the constructor.
             
                 
 <span class="param-type">String</span>
+|
+
+<span class="param-type">Array.&lt;String></span>
 
 
             
@@ -1417,7 +1519,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line66">line 66</a>
+        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line95">line 95</a>
     </li></ul></dd>
     
 
@@ -1498,6 +1600,9 @@ in the constructor.
             
                 
 <span class="param-type">String</span>
+|
+
+<span class="param-type">Array.&lt;String></span>
 
 
             
@@ -1548,7 +1653,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line75">line 75</a>
+        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line105">line 105</a>
     </li></ul></dd>
     
 
@@ -1630,7 +1735,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line82">line 82</a>
+        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line113">line 113</a>
     </li></ul></dd>
     
 
@@ -1653,6 +1758,396 @@ in the constructor.
 
 
 
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="stream"><span class="type-signature"></span>stream<span class="signature">(event, data, param<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {stream.Writable}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Creates and returns a stream.Writable instance that can be used to stream
+binary data.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The event name.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Number</span>
+|
+
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">Buffer</span>
+|
+
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The data to send along with the stream.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>param</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+|
+
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The options or callback.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sockets</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
+
+            <td class="description last">The list of socket ids to send.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>rooms</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
+
+            <td class="description last">The list of rooms to send.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>broadcast</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">Send to all connected sockets.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line83">line 83</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A stream.Writable instance.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">stream.Writable</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1725,7 +2220,7 @@ in the constructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line189">line 189</a>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line225">line 225</a>
     </li></ul></dd>
     
 
@@ -1808,7 +2303,7 @@ now contains the socket identification.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line121">line 121</a>
+        <a href="Socket.js.html">Socket.js</a>, <a href="Socket.js.html#line178">line 178</a>
     </li></ul></dd>
     
 
@@ -1895,7 +2390,7 @@ now contains the socket identification.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line175">line 175</a>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line211">line 211</a>
     </li></ul></dd>
     
 
@@ -1982,7 +2477,7 @@ now contains the socket identification.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line198">line 198</a>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line234">line 234</a>
     </li></ul></dd>
     
 
@@ -2069,7 +2564,7 @@ now contains the socket identification.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line138">line 138</a>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line171">line 171</a>
     </li></ul></dd>
     
 
@@ -2157,7 +2652,95 @@ be sent and new messages will be sent directly.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line155">line 155</a>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line193">line 193</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:socket_drain">socket_drain</h4>
+
+    
+
+
+
+<div class="description">
+    Emitted when the write buffer of the internal socket becomes empty.
+Can be used to throttle uploads.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="Sock.html#event:socket_drain">Sock#event:socket_drain</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Sock.js.html">Sock.js</a>, <a href="Sock.js.html#line256">line 256</a>
     </li></ul></dd>
     
 
@@ -2195,13 +2778,13 @@ be sent and new messages will be sent directly.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Server.html">Server</a></li><li><a href="Sock.html">Sock</a></li><li><a href="Socket.html">Socket</a></li></ul><h3>Events</h3><ul><li><a href="Sock.html#event:close">close</a></li><li><a href="Sock.html#event:end">end</a></li><li><a href="Sock.html#event:error">error</a></li><li><a href="Sock.html#event:reconnecting">reconnecting</a></li><li><a href="Sock.html#event:socket_connect">socket_connect</a></li><li><a href="Socket.html#event:close">close</a></li><li><a href="Socket.html#event:connect">connect</a></li><li><a href="Socket.html#event:end">end</a></li><li><a href="Socket.html#event:error">error</a></li><li><a href="Socket.html#event:reconnecting">reconnecting</a></li><li><a href="Socket.html#event:socket_connect">socket_connect</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Server.html">Server</a></li><li><a href="Sock.html">Sock</a></li><li><a href="Socket.html">Socket</a></li></ul><h3>Events</h3><ul><li><a href="Sock.html#event:close">close</a></li><li><a href="Sock.html#event:end">end</a></li><li><a href="Sock.html#event:error">error</a></li><li><a href="Sock.html#event:reconnecting">reconnecting</a></li><li><a href="Sock.html#event:socket_connect">socket_connect</a></li><li><a href="Sock.html#event:socket_drain">socket_drain</a></li><li><a href="Socket.html#event:close">close</a></li><li><a href="Socket.html#event:connect">connect</a></li><li><a href="Socket.html#event:end">end</a></li><li><a href="Socket.html#event:error">error</a></li><li><a href="Socket.html#event:reconnecting">reconnecting</a></li><li><a href="Socket.html#event:socket_connect">socket_connect</a></li><li><a href="Socket.html#event:socket_drain">socket_drain</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Sep 01 2016 11:58:51 GMT+0100 (IST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Dec 09 2016 10:18:23 GMT+0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

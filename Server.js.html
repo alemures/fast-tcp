@@ -28,6 +28,7 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
 
+var PassThrough = require('stream').PassThrough;
 var net = require('net');
 var util = require('util');
 var ut = require('utjs');
@@ -39,7 +40,13 @@ var Serializer = require('./Serializer');
 /**
  * The server class.
  *
- * @param {Object} opts The net.Server options.
+ * @param {Object} [opts] The Server and net.Server options.
+ * @param {Function} [opts.objectSerializer=JSON.stringify] Serializes an object into a binary
+ *        buffer. This functions allows you to implement custom serialization protocols for
+ *        the data or even use other known protocols like "Protocol Buffers" or  "MessagePack".
+ * @param {Function} [opts.objectDeserializer=JSON.parse] Deserializes a binary buffer into an
+ *        object. This functions allows you to implement custom serialization protocols for
+ *        the data or even use other known protocols like "Protocol Buffers" or  "MessagePack".
  * @constructor
  */
 function Server(opts) {
@@ -47,7 +54,7 @@ function Server(opts) {
   Server.super_.call(this);
 
   /**
-   * The connected sockets. The key is the Socket.id and the value a socket.
+   * The connected sockets. The key is the Socket.id and the value a Socket instance.
    * @type {Object}
    */
   this.sockets = {};
@@ -59,6 +66,7 @@ function Server(opts) {
    */
   this.rooms = {};
 
+  this._serializer = new Serializer(opts);
   this._server = net.createServer(opts);
   this._bindEvents();
 }
@@ -71,12 +79,12 @@ Server.prototype._superEmit = Server.prototype.emit;
  * Emit an event, if no sockets or rooms are provided, the event
  * will be broadcasted to all connected sockets.
  *
- * @param  {String} event The event name.
- * @param  {String|Number|Object|Buffer} data The data to send.
- * @param  {Object} [opts] The options.
- * @param  {String[]} [opts.sockets=[]] The list of socket ids to send.
- * @param  {String[]} [opts.rooms=[]] The list of rooms to send.
- * @param  {String[]} [opts.except=[]] The list of socket ids to exclude.
+ * @param {String} event The event name.
+ * @param {String|Number|Object|Buffer|Boolean} data The data to send.
+ * @param {Object} [opts] The options.
+ * @param {String[]} [opts.sockets=[]] The list of socket ids to send.
+ * @param {String[]} [opts.rooms=[]] The list of rooms to send.
+ * @param {String[]} [opts.except=[]] The list of socket ids to exclude.
  */
 Server.prototype.emit = function (event, data, opts) {
   opts = ut.isObject(opts) ? opts : {};
@@ -84,14 +92,30 @@ Server.prototype.emit = function (event, data, opts) {
 };
 
 /**
+ * Creates and returns a stream.Writable instance that can be used to stream
+ * binary data. If no opts.sockets or opts.rooms are provided, the stream
+ * will be broadcasted to all connected sockets.
+ *
+ * @param {String} event The event name.
+ * @param {String|Number|Object|Buffer|Boolean} data The data to send.
+ * @param {Object} [opts] The options.
+ * @param {String[]} [opts.sockets=[]] The list of socket ids to send.
+ * @param {String[]} [opts.rooms=[]] The list of rooms to send.
+ * @param {String[]} [opts.except=[]] The list of socket ids to exclude.
+ */
+Server.prototype.stream = function (event, data, opts) {
+  opts = ut.isObject(opts) ? opts : {};
+  return this._stream(event, data, opts);
+};
+
+/**
  * Join to a room.
  *
- * @param  {String} room The room name.
- * @param  {String} socketId The socket id.
+ * @param {String} room The room name.
+ * @param {String} socketId The socket id.
  */
 Server.prototype.join = function (room, socketId) {
   var socket = this.sockets[socketId];
-  var sockets;
 
   if (socket === undefined) {
     return;
@@ -101,7 +125,7 @@ Server.prototype.join = function (room, socketId) {
     this.rooms[room] = [];
   }
 
-  sockets = this.rooms[room];
+  var sockets = this.rooms[room];
   if (sockets.indexOf(socket) === -1) {
     sockets.push(socket);
     socket._rooms[room] = true;
@@ -111,8 +135,8 @@ Server.prototype.join = function (room, socketId) {
 /**
  * Leave a room.
  *
- * @param  {String} room The room name.
- * @param  {String} socketId The socket id.
+ * @param {String} room The room name.
+ * @param {String} socketId The socket id.
  */
 Server.prototype.leave = function (room, socketId) {
   var socket = this.sockets[socketId];
@@ -134,35 +158,35 @@ Server.prototype.leave = function (room, socketId) {
 /**
  * Leave all rooms.
  *
- * @param  {String} socketId The socket id.
+ * @param {String} socketId The socket id.
  */
 Server.prototype.leaveAll = function (socketId) {
   var socket = this.sockets[socketId];
-  var room;
 
   if (socket !== undefined) {
-    for (room in socket._rooms) {
+    for (var room in socket._rooms) {
       this.leave(room, socketId);
     }
   }
 };
 
 /**
- * Start the server.
+ * Start the server. It calls the underline net.Server#listen with the given arguments so
+ * multiple optional arguments can be used.
  *
- * @param  {Number} port The port to listen to.
+ * @see {@link https://nodejs.org/dist/latest-v6.x/docs/api/net.html#net_server_listen_port_hostname_backlog_callback}
+ * @param {Number} [port] The port to listen to, this is the most basic usage, check the link
+ *                        for more advanced usages.
  */
-Server.prototype.listen = function (port) {
-  this._server.listen(port);
+Server.prototype.listen = function () {
+  this._server.listen.apply(this._server, arguments);
 };
 
 /**
  * Disconnect all the clients and close the server.
  */
 Server.prototype.close = function () {
-  var socketId;
-
-  for (socketId in this.sockets) {
+  for (var socketId in this.sockets) {
     this.sockets[socketId].end();
   }
 
@@ -174,45 +198,107 @@ Server.prototype._emit = function (event, data, opts) {
   var rooms = ut.isArray(opts.rooms) ? opts.rooms : [];
   var except = ut.isArray(opts.except)  ? opts.except : [];
 
-  var socketId;
-  var sockets;
-  var socket;
-  var i;
-  var j;
-
-  // Send to list of sockets
   if (socketIds.length > 0) {
-    for (i = 0; i &lt; socketIds.length; i++) {
-      socket = this.sockets[socketIds[i]];
-      if (socket !== undefined &amp;&amp; except.indexOf(socket.id) === -1) {
-        socket.emit(event, data);
+    this._emitToSockets(event, data, socketIds, except);
+  }
+
+  if (rooms.length > 0) {
+    this._emitToRooms(event, data, rooms, except);
+  }
+
+  if (socketIds.length + rooms.length === 0) {
+    this._emitBroadcast(event, data, except);
+  }
+};
+
+Server.prototype._emitToSockets = function (event, data, socketIds, except) {
+  for (var i = 0; i &lt; socketIds.length; i++) {
+    var socket = this.sockets[socketIds[i]];
+    if (socket !== undefined &amp;&amp; except.indexOf(socket.id) === -1) {
+      socket.emit(event, data);
+    }
+  }
+};
+
+Server.prototype._emitToRooms = function (event, data, rooms, except) {
+  for (var i = 0; i &lt; rooms.length; i++) {
+    var sockets = this.rooms[rooms[i]];
+    if (sockets !== undefined) {
+      for (var j = 0; j &lt; sockets.length; j++) {
+        var socket = sockets[j];
+        if (except.indexOf(socket.id) === -1) {
+          socket.emit(event, data);
+        }
       }
     }
   }
+};
 
-  // Send to list of rooms
+Server.prototype._emitBroadcast = function (event, data, except) {
+  for (var socketId in this.sockets) {
+    if (except.indexOf(socketId) === -1) {
+      this.sockets[socketId].emit(event, data);
+    }
+  }
+};
+
+Server.prototype._stream = function (event, data, opts) {
+  var socketIds = ut.isArray(opts.sockets) ? opts.sockets : [];
+  var rooms = ut.isArray(opts.rooms) ? opts.rooms : [];
+  var except = ut.isArray(opts.except)  ? opts.except : [];
+
+  if (socketIds.length > 0) {
+    return this._streamToSockets(event, data, socketIds, except);
+  }
+
   if (rooms.length > 0) {
-    for (i = 0; i &lt; rooms.length; i++) {
-      sockets = this.rooms[rooms[i]];
-      if (sockets !== undefined) {
-        for (j = 0; j &lt; sockets.length; j++) {
-          socket = sockets[j];
-          if (except.indexOf(socket.id) === -1) {
-            socket.emit(event, data);
-          }
+    return this._streamToRooms(event, data, rooms, except);
+  }
+
+  return this._streamBroadcast(event, data, except);
+};
+
+Server.prototype._streamToSockets = function (event, data, socketIds, except) {
+  var writableStream = new PassThrough();
+
+  for (var i = 0; i &lt; socketIds.length; i++) {
+    var socket = this.sockets[socketIds[i]];
+    if (socket !== undefined &amp;&amp; except.indexOf(socket.id) === -1) {
+      writableStream.pipe(socket.stream(event, data));
+    }
+  }
+
+  return writableStream;
+};
+
+Server.prototype._streamToRooms = function (event, data, rooms, except) {
+  var writableStream = new PassThrough();
+
+  for (var i = 0; i &lt; rooms.length; i++) {
+    var sockets = this.rooms[rooms[i]];
+    if (sockets !== undefined) {
+      for (var j = 0; j &lt; sockets.length; j++) {
+        var socket = sockets[j];
+        if (except.indexOf(socket.id) === -1) {
+          writableStream.pipe(socket.stream(event, data));
         }
       }
     }
   }
 
-  // Broadcast if no socketIds or rooms are provided
-  if (socketIds.length + rooms.length === 0) {
-    for (socketId in this.sockets) {
-      if (except.indexOf(socketId) === -1) {
-        this.sockets[socketId].emit(event, data);
-      }
+  return writableStream;
+};
+
+Server.prototype._streamBroadcast = function (event, data, except) {
+  var writableStream = new PassThrough();
+
+  for (var socketId in this.sockets) {
+    if (except.indexOf(socketId) === -1) {
+      writableStream.pipe(this.sockets[socketId].stream(event, data));
     }
   }
+
+  return writableStream;
 };
 
 Server.prototype._bindEvents = function () {
@@ -236,7 +322,7 @@ Server.prototype._bindEvents = function () {
 };
 
 Server.prototype._bindEventsSocket = function (sock) {
-  var socket = new SocketServ(this._generateSocketId(), sock, this);
+  var socket = new SocketServ(sock, this);
   var _this = this;
 
   socket.on('close', function () {
@@ -252,16 +338,6 @@ Server.prototype._bindEventsSocket = function (sock) {
   this._superEmit('connection', socket);
 };
 
-Server.prototype._generateSocketId = function () {
-  var socketId;
-
-  do {
-    socketId = ut.randomString(5);
-  } while (this.sockets[socketId] !== undefined);
-
-  return socketId;
-};
-
 module.exports = Server;
 </code></pre>
         </article>
@@ -273,13 +349,13 @@ module.exports = Server;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Server.html">Server</a></li><li><a href="Sock.html">Sock</a></li><li><a href="Socket.html">Socket</a></li></ul><h3>Events</h3><ul><li><a href="Sock.html#event:close">close</a></li><li><a href="Sock.html#event:end">end</a></li><li><a href="Sock.html#event:error">error</a></li><li><a href="Sock.html#event:reconnecting">reconnecting</a></li><li><a href="Sock.html#event:socket_connect">socket_connect</a></li><li><a href="Socket.html#event:close">close</a></li><li><a href="Socket.html#event:connect">connect</a></li><li><a href="Socket.html#event:end">end</a></li><li><a href="Socket.html#event:error">error</a></li><li><a href="Socket.html#event:reconnecting">reconnecting</a></li><li><a href="Socket.html#event:socket_connect">socket_connect</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Server.html">Server</a></li><li><a href="Sock.html">Sock</a></li><li><a href="Socket.html">Socket</a></li></ul><h3>Events</h3><ul><li><a href="Sock.html#event:close">close</a></li><li><a href="Sock.html#event:end">end</a></li><li><a href="Sock.html#event:error">error</a></li><li><a href="Sock.html#event:reconnecting">reconnecting</a></li><li><a href="Sock.html#event:socket_connect">socket_connect</a></li><li><a href="Sock.html#event:socket_drain">socket_drain</a></li><li><a href="Socket.html#event:close">close</a></li><li><a href="Socket.html#event:connect">connect</a></li><li><a href="Socket.html#event:end">end</a></li><li><a href="Socket.html#event:error">error</a></li><li><a href="Socket.html#event:reconnecting">reconnecting</a></li><li><a href="Socket.html#event:socket_connect">socket_connect</a></li><li><a href="Socket.html#event:socket_drain">socket_drain</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Sep 01 2016 11:58:51 GMT+0100 (IST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Dec 09 2016 10:18:23 GMT+0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>

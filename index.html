@@ -26,7 +26,7 @@
     
 
 
-    <h3>fast-tcp 3.1.1</h3>
+    <h3>fast-tcp 3.2.0</h3>
 
 
 
@@ -43,43 +43,175 @@
 
 
     <section>
-        <article><h1>fast-tcp</h1><p>fast-tcp is an extremely fast TCP client and server that allows to emit and listen to events. The messages are sent in binary format using Buffer and TCP, standard modules of Node.JS.</p>
-<p>In order to get the maximum performance, every data type is sent using the fastest way to write it into the underline Buffer. Integer numbers are sent as a signed integer of 48 bits, decimal numbers as double of 64 bits, strings as utf8 string, buffers as raw bytes and objects as utf8 string using JSON.stringify() / JSON.parse() javascript functions. In this way, sending a string is faster than an object, numbers are faster than strings and buffers are the fastest because they are just copied without any transformation.</p>
+        <article><h1>fast-tcp</h1><p>fast-tcp is an extremely fast TCP client and server that allows to emit and listen to events. It also provides more features like binary streaming, acknowledgements, broadcasts, rooms, etc.</p>
+<p>In order to get the maximum performance, every data type is sent using the fastest way to write it into the underline Buffer. Integer numbers are sent as signed integers of 48 bits, decimal numbers as double of 64 bits, boolean as byte, strings as utf8 string, buffers as binary, objects are serialized as binary and streams are transmitted in binary over the fast-tcp protocol.</p>
+<p>To be flexible sending objects, by default, they are serialized/deserialized using JSON.stringify/JSON.parse so, sending a Javascript object is possible out of the box. It is also possible to override the objects serialization so, you can use third-party libraries like Protocol Buffer, avro, MessagePack or even your own implementation.</p>
 <h2>Install</h2><p>npm install fast-tcp</p>
 <h2>Features</h2><ul>
-<li>All primitive data types are supported (string, number, object, buffer)</li>
-<li>Configurable automatic reconnection</li>
-<li>Callbacks for particular emits</li>
-<li>Rooms</li>
+<li>All primitive data types are supported (boolean, string, number, object, buffer)</li>
+<li>Configurable client reconnection</li>
+<li>Callbacks in message and stream reception (acknowledgements)</li>
+<li>Broadcasts, rooms and client to client messages and streams</li>
+<li>Configurable object serializer/deserializer (Protocol Buffer, avro, MessagePack, etc)</li>
+<li>High performance binary streams over fast-tcp protocol</li>
 <li>AS FAST AS LIGHT!</li>
 </ul>
-<h2>Samples</h2><p>Server:</p>
-<pre class="prettyprint source"><code>var Server = require('fast-tcp').Server;
+<h2>Client Libraries</h2><ul>
+<li><a href="https://github.com/alemures/fast-tcp-java">fast-tcp-java</a></li>
+<li><a href="https://github.com/alemures/fast-tcp-c">fast-tcp-c</a> - In development</li>
+</ul>
+<h2>Samples</h2><h4>Simple socket-server</h4><pre class="prettyprint source lang-javascript"><code>var Server = require('fast-tcp').Server;
+var Socket = require('fast-tcp').Socket;
 
 var server = new Server();
-server.on('connection', function(socket) {
-  // Simple event
-  socket.emit('welcome', 'Hi there');
-
-  // Using callbacks (avoid mixing events)
-  socket.on('sum', function(numbers, cb) {
-    cb(numbers.n1 + numbers.n2);
+server.on('connection', function (socket) {
+  socket.on('login', function (username) {
+    console.log('Trying to login: ' + username);
   });
 });
-server.listen(5000);</code></pre><p>Client:</p>
-<pre class="prettyprint source"><code>var Socket = require('fast-tcp').Socket;
+server.listen(5000);
+
 var socket = new Socket({
   host: 'localhost',
   port: 5000
 });
-
-socket.emit('sum', { n1: 5, n2: 3 }, function(result) {
-  console.log('Result:', result);
+socket.emit('login', 'alejandro');</code></pre><h4>Configurable client reconnection</h4><pre class="prettyprint source lang-javascript"><code>var socket = new Socket({
+  ...
+  reconnect: true, // (true by default)
+  reconnectInterval: 2000 // (1000ms by default)
 });
 
-socket.on('welcome', function(message) {
-  console.log('Server says: ' + message);
-});</code></pre><p>Check out the folder <code>examples/</code> for more samples.</p>
+// It's required, otherwise node.js will throw an &quot;Unhandled 'error' event&quot;
+socket.on('error', function (err) {
+  console.error(err);
+});</code></pre><h4>Callbacks in message and stream reception (acknowledgements)</h4><p>For messages:</p>
+<pre class="prettyprint source lang-javascript"><code>server.on('connection', function (socket) {
+  socket.on('login', function (username, callback) {
+    callback(username === 'alejandro' ? true : false);
+  });
+});
+
+// Client
+socket.emit('login', 'alejandro', function (response) {
+  console.log('Response: ' + response);
+});</code></pre><p>For streams:</p>
+<pre class="prettyprint source lang-javascript"><code>server.on('connection', function (socket) {
+  socket.on('image', function (readStream, info, callback) {
+    var writeStream = fs.createWriteStream(info.name);
+    readStream.pipe(writeStream);
+
+    writeStream.on('finish', function () {
+      callback('Image &quot;' + info.name + '&quot; stored!');
+    });
+  });
+});
+
+// Client
+var writeStream = socket.stream('image', { name: 'img-copy.jpg' }, function (response) {
+  console.log('Response: ' + response);
+});
+fs.createReadStream('img.jpg').pipe(writeStream);</code></pre><h4>Broadcasts, rooms and client to client messages and streams</h4><p>From client:</p>
+<pre class="prettyprint source lang-javascript"><code>// Join room
+socket.join('room_name');
+
+// Leave room
+socket.leave('room_name');
+
+// Leave all rooms
+socket.leaveAll();
+
+// Broadcast event to everyone, exclude sender
+socket.emit('hello', 'Hello, World!', { broadcast: true });
+
+// Broadcast stream to everyone, exclude sender
+var writeStream = socket.stream('hello', 'Hello, World!', { broadcast: true });
+
+// Broadcast event to everyone, include sender
+socket.emit('hello', 'Hello, World!', { broadcast: true, sockets: [socket.id] });
+
+// Broadcast event to everyone in room &quot;room_name&quot;, exclude sender
+socket.emit('hello', 'Hello, Room!', { rooms: ['room_name'] });
+
+// Broadcast stream to everyone in room &quot;room_name&quot;, exclude sender
+var writeStream = socket.stream('hello', 'Hello, World!', { rooms: ['room_name'] });
+
+// Broadcast event to everyone in room &quot;room_name&quot;, include sender
+socket.emit('hello', 'Hello, Room!', { rooms: ['room_name'], sockets: [socket.id] });
+
+// Send event to individual &quot;socket_id&quot;
+socket.emit('hello', 'Hello, Socket!', { sockets: ['socket_id'] });
+
+// Open stream to individual &quot;socket_id&quot;
+var writeStream = socket.stream('hello', 'Hello, World!', { sockets: ['socket_id'] });</code></pre><blockquote>
+<p>To use the <em>socket#id</em> attribute you must wait for the event 'connect'.</p>
+</blockquote>
+<p>From server:</p>
+<pre class="prettyprint source lang-javascript"><code>// Join room
+server.join('room_name', 'socket_id');
+
+// Leave room
+server.leave('room_name', 'socket_id');
+
+// Leave all rooms
+server.leaveAll('socket_id');
+
+// Broadcast event to everyone
+server.emit('hello', 'Hello, World!');
+
+// Broadcast stream to everyone
+var writeStream = server.stream('hello', 'Hello, World!');
+
+// Broadcast event to everyone, with exceptions
+server.emit('hello', 'Hello, World!', { except: ['socket_id'] });
+
+// Broadcast stream to everyone, with exceptions
+var writeStream = server.stream('hello', 'Hello, World!', { except: ['socket_id'] });
+
+// Broadcast event to everyone in room &quot;room_name&quot;
+server.emit('hello', 'Hello, Room!', { rooms: ['room_name'] });
+
+// Broadcast stream to everyone in room &quot;room_name&quot;
+var writeStream = server.stream('hello', 'Hello, Room!', { rooms: ['room_name'] });
+
+// Broadcast event to everyone in room &quot;room_name&quot;, with exceptions
+server.emit('hello', 'Hello, Room!', { rooms: ['room_name'], except: ['socket_id'] });
+
+// Broadcast stream to everyone in room &quot;room_name&quot;, with exceptions
+var writeStream = server.stream('hello', 'Hello, Room!', { rooms: ['room_name'], except: ['socket_id'] });
+
+// Send event to individual &quot;socket_id&quot;
+server.emit('hello', 'Hello, Socket!', { sockets: ['socket_id'] });
+
+// Open stream to individual &quot;socket_id&quot;
+var writeStream = server.stream('hello', 'Hello, Socket!', { sockets: ['socket_id'] });</code></pre><h4>Configurable object serializer/deserializer</h4><pre class="prettyprint source lang-javascript"><code>var server = new Server({
+  objectDeserializer: function (buffer, event) {
+    return User.fromBuffer(buffer);
+  }
+});
+
+server.on('connection', function (socket) {
+  socket.on('login', function (user) {
+    console.log(user.getUsername() + '->' + user.getPassword());
+  });
+});
+
+// Client
+var socket = new Socket({
+  ...
+  objectSerializer: function (user, event) {
+    return user.toBuffer();
+  }
+});
+
+socket.emit('login', new User('alex', '1234'));</code></pre><h4>High performance binary streams</h4><pre class="prettyprint source lang-javascript"><code>server.on('connection', function (socket) {
+  socket.on('image', function (readStream, info) {
+    readStream.pipe(fs.createWriteStream(info.name));
+  });
+});
+
+// Client
+var writeStream = socket.stream('image', { name: 'img-copy.jpg' });
+fs.createReadStream('img.jpg').pipe(writeStream);</code></pre><p>Check out the folder <code>examples/</code> for more samples.</p>
 <h2>jsdoc</h2><p>http://alemures.github.io/fast-tcp/</p></article>
     </section>
 
@@ -91,13 +223,13 @@ socket.on('welcome', function(message) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Server.html">Server</a></li><li><a href="Sock.html">Sock</a></li><li><a href="Socket.html">Socket</a></li></ul><h3>Events</h3><ul><li><a href="Sock.html#event:close">close</a></li><li><a href="Sock.html#event:end">end</a></li><li><a href="Sock.html#event:error">error</a></li><li><a href="Sock.html#event:reconnecting">reconnecting</a></li><li><a href="Sock.html#event:socket_connect">socket_connect</a></li><li><a href="Socket.html#event:close">close</a></li><li><a href="Socket.html#event:connect">connect</a></li><li><a href="Socket.html#event:end">end</a></li><li><a href="Socket.html#event:error">error</a></li><li><a href="Socket.html#event:reconnecting">reconnecting</a></li><li><a href="Socket.html#event:socket_connect">socket_connect</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Server.html">Server</a></li><li><a href="Sock.html">Sock</a></li><li><a href="Socket.html">Socket</a></li></ul><h3>Events</h3><ul><li><a href="Sock.html#event:close">close</a></li><li><a href="Sock.html#event:end">end</a></li><li><a href="Sock.html#event:error">error</a></li><li><a href="Sock.html#event:reconnecting">reconnecting</a></li><li><a href="Sock.html#event:socket_connect">socket_connect</a></li><li><a href="Sock.html#event:socket_drain">socket_drain</a></li><li><a href="Socket.html#event:close">close</a></li><li><a href="Socket.html#event:connect">connect</a></li><li><a href="Socket.html#event:end">end</a></li><li><a href="Socket.html#event:error">error</a></li><li><a href="Socket.html#event:reconnecting">reconnecting</a></li><li><a href="Socket.html#event:socket_connect">socket_connect</a></li><li><a href="Socket.html#event:socket_drain">socket_drain</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Sep 01 2016 11:58:51 GMT+0100 (IST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Dec 09 2016 10:18:23 GMT+0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>
