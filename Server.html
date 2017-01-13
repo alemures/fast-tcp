@@ -264,7 +264,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line24">line 24</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line28">line 28</a>
     </li></ul></dd>
     
 
@@ -278,6 +278,17 @@
 
 
 
+
+<h5>Fires:</h5>
+<ul>
+    <li><a href="Server.html#event:listening">Server#event:listening</a></li>
+
+    <li><a href="Server.html#event:close">Server#event:close</a></li>
+
+    <li><a href="Server.html#event:connection">Server#event:connection</a></li>
+
+    <li><a href="Server.html#event:error">Server#event:error</a></li>
+</ul>
 
 
 
@@ -363,7 +374,7 @@ the value an array of sockets.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line39">line 39</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -435,7 +446,7 @@ the value an array of sockets.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line32">line 32</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -513,7 +524,7 @@ the value an array of sockets.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line160">line 160</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line164">line 164</a>
     </li></ul></dd>
     
 
@@ -878,7 +889,7 @@ will be broadcasted to all connected sockets.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line61">line 61</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line65">line 65</a>
     </li></ul></dd>
     
 
@@ -1032,7 +1043,7 @@ will be broadcasted to all connected sockets.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line89">line 89</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line93">line 93</a>
     </li></ul></dd>
     
 
@@ -1186,7 +1197,7 @@ will be broadcasted to all connected sockets.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line113">line 113</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line117">line 117</a>
     </li></ul></dd>
     
 
@@ -1317,7 +1328,7 @@ will be broadcasted to all connected sockets.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line135">line 135</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line139">line 139</a>
     </li></ul></dd>
     
 
@@ -1462,7 +1473,7 @@ multiple optional arguments can be used.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line153">line 153</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line157">line 157</a>
     </li></ul></dd>
     
 
@@ -1835,7 +1846,7 @@ will be broadcasted to all connected sockets.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line78">line 78</a>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line82">line 82</a>
     </li></ul></dd>
     
 
@@ -1867,6 +1878,338 @@ will be broadcasted to all connected sockets.
     
 
     
+        <h3 class="subsection-title">Events</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:close">close</h4>
+
+    
+
+
+
+<div class="description">
+    Close event from net.Server.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line297">line 297</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:connection">connection</h4>
+
+    
+
+
+
+<div class="description">
+    A new Socket was connected.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line324">line 324</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:error">error</h4>
+
+    
+
+
+
+<div class="description">
+    Error event from net.Server.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line334">line 334</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:listening">listening</h4>
+
+    
+
+
+
+<div class="description">
+    Listening event from net.Server.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Server.js.html">Server.js</a>, <a href="Server.js.html#line284">line 284</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
 </article>
 
 </section>
@@ -1877,13 +2220,13 @@ will be broadcasted to all connected sockets.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Server.html">Server</a></li><li><a href="Sock.html">Sock</a></li><li><a href="Socket.html">Socket</a></li></ul><h3>Events</h3><ul><li><a href="Sock.html#event:close">close</a></li><li><a href="Sock.html#event:end">end</a></li><li><a href="Sock.html#event:error">error</a></li><li><a href="Sock.html#event:reconnecting">reconnecting</a></li><li><a href="Sock.html#event:socket_connect">socket_connect</a></li><li><a href="Sock.html#event:socket_drain">socket_drain</a></li><li><a href="Socket.html#event:close">close</a></li><li><a href="Socket.html#event:connect">connect</a></li><li><a href="Socket.html#event:end">end</a></li><li><a href="Socket.html#event:error">error</a></li><li><a href="Socket.html#event:reconnecting">reconnecting</a></li><li><a href="Socket.html#event:socket_connect">socket_connect</a></li><li><a href="Socket.html#event:socket_drain">socket_drain</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Server.html">Server</a></li><li><a href="Sock.html">Sock</a></li><li><a href="Socket.html">Socket</a></li></ul><h3>Events</h3><ul><li><a href="Server.html#event:close">close</a></li><li><a href="Server.html#event:connection">connection</a></li><li><a href="Server.html#event:error">error</a></li><li><a href="Server.html#event:listening">listening</a></li><li><a href="Sock.html#event:close">close</a></li><li><a href="Sock.html#event:end">end</a></li><li><a href="Sock.html#event:error">error</a></li><li><a href="Sock.html#event:reconnecting">reconnecting</a></li><li><a href="Sock.html#event:socket_connect">socket_connect</a></li><li><a href="Sock.html#event:socket_drain">socket_drain</a></li><li><a href="Socket.html#event:close">close</a></li><li><a href="Socket.html#event:connect">connect</a></li><li><a href="Socket.html#event:end">end</a></li><li><a href="Socket.html#event:error">error</a></li><li><a href="Socket.html#event:reconnecting">reconnecting</a></li><li><a href="Socket.html#event:socket_connect">socket_connect</a></li><li><a href="Socket.html#event:socket_drain">socket_drain</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jan 12 2017 11:29:01 GMT+0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Jan 13 2017 10:29:15 GMT+0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>
