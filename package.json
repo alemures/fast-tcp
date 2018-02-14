@@ -8,11 +8,11 @@
     "utjs": "2.x.x"
   },
   "devDependencies": {
-    "chai": "3.x.x",
+    "chai": "4.x.x",
     "jscs": "3.x.x",
     "jsdoc": "3.x.x",
     "jshint": "2.x.x",
-    "mocha": "3.x.x"
+    "mocha": "5.x.x"
   },
   "main": "index.js",
   "files": [

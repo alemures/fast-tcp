@@ -1,11 +1,13 @@
+/* jshint -W030 */
+
 'use strict';
 
-var describe = require('mocha').describe;
-var it = require('mocha').it;
-var chai = require('chai');
+const describe = require('mocha').describe;
+const it = require('mocha').it;
+const expect = require('chai').expect;
 
-describe('test', function () {
-  it('should be true', function () {
-    chai.assert(true, 'true');
+describe('test', () => {
+  it('should be true', () => {
+    expect(true).to.be.true;
   });
 });
