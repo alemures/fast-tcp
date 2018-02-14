@@ -2,7 +2,7 @@ const Benchmark = require('benchmark');
 
 const Serializer = require('../../lib/Serializer');
 
-const suite = new Benchmark.Suite;
+const suite = new Benchmark.Suite();
 const serializer = new Serializer();
 
 suite.add('Serializer#serialize - string data', () => {
@@ -13,4 +13,5 @@ suite.add('Serializer#serialize - string data', () => {
   console.log(String(event.target));
 }).on('complete', () => {
   console.log('Finished Serializer');
-}).run({ 'async': true });
+})
+  .run({ async: true });
