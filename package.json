@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "debug": "^3.1.0",
+    "istanbul": "^0.4.5",
     "utjs": "^2.1.0"
   },
   "devDependencies": {
@@ -22,6 +23,7 @@
   ],
   "scripts": {
     "test": "mocha test/unit/mocha.conf.js test/unit/*.js",
+    "test:cover": "istanbul cover --report cobertura _mocha test/unit/mocha.conf.js test/unit/*.js",
     "benchmark": "node test/benchmark/*.js",
     "lint": "eslint index.js lib/*.js test/**/*.js",
     "doc": "jsdoc ./lib/ ./package.json ./README.md -d ./doc"
