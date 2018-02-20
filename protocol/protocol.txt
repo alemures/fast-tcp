@@ -4,7 +4,7 @@ Message Format
 --------------
 
 +---------------+---------+-------+----------+-------------+-----------+-------------+--------+------------+------+
-|   uInt32LE    |  byte   | byte  |   byte   |    byte     | uInt32LE  |  uInt16LE   | string |  uInt32LE  |  *   |
+|   uInt32LE    |  byte   | byte  |   byte   |    byte     | uInt32LE  |  uInt32LE   | string |  uInt32LE  |  *   |
 +---------------+---------+-------+----------+-------------+-----------+-------------+--------+------------+------+
 | messageLength | version | flags | dataType | messageType | messageId | eventLength | event  | dataLength | data |
 +---------------+---------+-------+----------+-------------+-----------+-------------+--------+------------+------+
@@ -15,7 +15,9 @@ Message Format
 Version
 -------
 
-- 1. Actual
+- 1.
+- 2.
+  * eventLength uInt16LE changed to uInt32LE
 
 
 Flags
@@ -61,4 +63,3 @@ Message Type
 - 15. Data stream open to socket
 - 16. Data stream open to room
 - 17. Data stream open to broadcast
- 
