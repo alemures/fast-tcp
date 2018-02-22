@@ -4,6 +4,10 @@
     "mocha": true
   },
   "globals": {
-    "expect": true
+    "expect": true,
+    "sinon": true
+  },
+  "rules": {
+    "no-unused-expressions": 0
   }
 }
